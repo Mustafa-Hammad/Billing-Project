@@ -1,0 +1,109 @@
+Database Creation
+
+CREATE TABLE Customer
+(
+  Cu_Id SERIAl NOT NULL,
+  Name TEXT NOT NULL,
+  Address TEXT NOT NULL,
+  email TEXT NOT NULL,
+  PRIMARY KEY (Cu_Id)
+);
+
+CREATE TABLE Rate_Plan
+(
+  Rp_Id SERIAL NOT NULL,
+  Description TEXT NOT NULL,
+  PRIMARY KEY (Rp_Id)
+);
+
+CREATE TABLE Service_Package
+(
+  Sp_Id SERIAL NOT NULL,
+  for_service TEXT NOT NULL,
+  to_service TEXT NOT NULL,
+  price FLOAT NOT NULL,
+  value INT NOT NULL,
+  PRIMARY KEY (Sp_Id)
+);
+
+CREATE TABLE Rate_Services
+(
+  Rp_Id INT NOT NULL,
+  Sp_Id INT NOT NULL,
+  PRIMARY KEY (Rp_Id, Sp_Id),
+  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
+  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
+);
+
+CREATE TABLE Tariff_Zone
+(
+  T_Id SERIAL NOT NULL,
+  Country TEXT NOT NULL,
+  Value INT NOT NULL,
+  for_service TEXT NOT NULL,
+  PRIMARY KEY (T_Id)
+);
+
+CREATE TABLE Extrenal_Charge
+(
+  Ex_Id SERIAL NOT NULL,
+  for_service INT NOT NULL,
+  extra_value INT NOT NULL,
+  PRIMARY KEY (Ex_Id)
+);
+
+CREATE TABLE Recurring
+(
+  Rec_Id SERIAL NOT NULL,
+  Description TEXT NOT NULL,
+  value INT NOT NULL,
+  duration FLOAT NOT NULL,
+  PRIMARY KEY (Rec_Id)
+);
+
+CREATE TABLE CDR
+(
+  CDR_Id SERIAL NOT NULL,
+  Start_Date DATE NOT NULL,
+  Start_Hour TIME NOT NULL,
+  Time_Stamp TIMESTAMP NOT NULL,
+  Event_Type INT NOT NULL,
+  Consumption INT NOT NULL,
+  MSISDN_A TEXT NOT NULL,
+  MSISDN_B TEXT NOT NULL,
+  Rp_Id INT NOT NULL,
+  Sp_Id INT NOT NULL,
+  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
+  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
+);
+
+CREATE TABLE Contract
+(
+  Con_Id SERIAL NOT NULL,
+  MSISDN TEXT NOT NULL,
+  date DATE NOT NULL,
+  credit_limit INT NOT NULL,
+  Cu_Id INT NOT NULL,
+  Rp_Id INT NOT NULL,
+  PRIMARY KEY (Con_Id),
+  FOREIGN KEY (Cu_Id) REFERENCES Customer(Cu_Id),
+  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
+  UNIQUE (MSISDN)
+);
+
+CREATE TABLE Recurring_Contract_Id
+(
+  Remaining INT NOT NULL,
+  Con_Id INT NOT NULL,
+  Rec_Id INT NOT NULL,
+  FOREIGN KEY (Con_Id) REFERENCES Contract(Con_Id),
+  FOREIGN KEY (Rec_Id) REFERENCES Recurring(Rec_Id)
+);
+
+CREATE TABLE One_Time_Fee_Contract_Id
+(
+  Con_Id INT NOT NULL,
+  Sp_Id INT NOT NULL,
+  FOREIGN KEY (Con_Id) REFERENCES Contract(Con_Id),
+  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
+);
