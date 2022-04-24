@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Admin Login Page </title>  
+        <style>
+            Body {
+                font-family: Calibri, Helvetica, sans-serif;
+                background-color: #f1f1f1;
+            }
+            button {
+                background-color: #4CAF50;
+                width: 60%;
+                color: orange;
+                padding: 15px;
+                margin-left: 20%;
+                border: none;
+                cursor: pointer;
+            }
+            form {
+                border: 3px solid #f1f1f1;
+            }
+            input[type=text], input[type=password] {
+                width: 60%;
+                margin-left: 20%;
+                margin-bottom: 10px;
+                padding: 12px 20px;
+                display: inline-block;
+                border: 2px solid green;
+                box-sizing: border-box;
+            }
+            .container {
+                padding: 25px;
+                background-color: lightblue;
+                /*height: 250px;*/
+                width: 50%;
+                margin-left: 25%;
+            }
+        </style> 
+    </head>
+    <body>
+    <center> <h1> Admin Login Form </h1> </center>   
+    <form>  
+        <div class="container">   
+            <center><label>Username</label></center><br> 
+            <input type="text" placeholder="Enter Username" name="username" required><br>
+            <center><label>Password</label></center><br>
+            <input type="password" placeholder="Enter Password" name="password" required>  
+            <button type="submit">Login</button>   
+        </div>   
+    </form>     
+</body>
+</html>
