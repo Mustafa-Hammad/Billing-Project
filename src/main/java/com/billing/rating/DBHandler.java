@@ -14,16 +14,15 @@ import java.sql.SQLException;
  */
 public class DBHandler {
 
-    private static String dataBaseUrl = "jdbc:postgresql://bnxyowyoaextmuwl1mr0-postgresql.services.clever-cloud.com:5432/bnxyowyoaextmuwl1mr0";
-    private static String userName = "uowc5i0hurqszsjbk8za";
-    private static String dataBasePassword = "q1nNa5inzQt7hodysREq";
+    private static String dataBaseUrl = "jdbc:postgresql://blo19szvs1jhscgzh9x6-postgresql.services.clever-cloud.com:5432/blo19szvs1jhscgzh9x6";
+    private static String userName = "uixcvchkhlu70fcqjtsr";
+    private static String dataBasePassword = "W04cefxfqlELk9bCnzbZ";
     private static Connection connection = null;
 
     public static void startConnection() throws SQLException, ClassNotFoundException {
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(DBHandler.dataBaseUrl, DBHandler.userName, DBHandler.dataBasePassword);
         System.out.println("successfully connected");
-
     }
 
     public static void closeConnection() throws SQLException {
