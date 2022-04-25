@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author ahmedmedhat
@@ -37,26 +36,33 @@ public class DBConnection {
         System.out.println("Opened database successfully");
 //        return null;
     }
-    
-    
-    public boolean checkLogin(String username, String password){
+
+    public boolean checkLogin(String username, String password) {
         boolean st = false;
         try {
             PreparedStatement ps = c.prepareStatement("select * from admin where name=? and password=?");
             ps.setString(1, username);
             ps.setString(2, password);
-            ResultSet rs =ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             st = rs.next();
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(Exception e) {
+        } catch (Exception e) {
         }
-        return st;    
+        return st;
     }
 
-    
+    public void addUser(String username, String email,String address, int credit) {
+        try {
+            //Cu_Id serial, name string, address string, cridet int
+            PreparedStatement ps = c.prepareStatement("insert into Customer values(default,?, ?, ?, ?);");
+            ps.setString(1, username);
+            ps.setString(2, email);
+            ps.setString(3, address);
+            ps.setInt(4, credit);
+            ps.executeQuery(); 
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
-
-   
-    
-    

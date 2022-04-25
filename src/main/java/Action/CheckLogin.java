@@ -39,23 +39,13 @@ public class CheckLogin extends HttpServlet {
         String userName = req.getParameter("username");
         String password = req.getParameter("password");
         boolean b = db.checkLogin(userName, password);
-        //for webpage
-        String header = "<!DOCTYPE html>\n"
-                + "<html>\n"
-                + "    <head>\n"
-                + "        <title>Adminis</title>\n"
-                + "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
-                + "    </head>\n"
-                + "    <body>";
-        String footer = "</body>\n"
-                + "</html>";
-        pw.println(header);
+        
         if (b) {
-            
+            req.getRequestDispatcher("login.jsp").forward(req, res);
         } else {
+            res.sendError(401, "You Can not access the material"); //Non-Authoritative Information
             pw.println("<p style='color:Red'>login error</p>");
         }
-        pw.println(footer);
 
     }
 
