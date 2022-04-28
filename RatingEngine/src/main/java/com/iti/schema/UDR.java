@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.billing.schema;
+package com.iti.schema;
 
 import java.util.Date;
 
@@ -10,24 +10,34 @@ import java.util.Date;
  *
  * @author nora
  */
-public class CDR {
+public class UDR {
 
+    private int udrId;
     private int cdrId;
+    private float contractId;
     private String timeStamp;
     private Date startDate;
     private int dialA;
     private int dialB;
     private int serviceId;
     private int ratePlanId;
-    private int eventType; 
-    private float amount;
+    private float cost;
+    private float consumption;
 
-    public int getCdrId() {
-        return cdrId;
+    public int getUdrId() {
+        return udrId;
     }
 
-    public void setCdrId(int cdrId) {
-        this.cdrId = cdrId;
+    public void setUdrId(int udrId) {
+        this.udrId = udrId;
+    }
+
+    public float getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(float contractId) {
+        this.contractId = contractId;
     }
 
     public String getTimeStamp() {
@@ -78,20 +88,28 @@ public class CDR {
         this.ratePlanId = ratePlanId;
     }
 
-    public int getEventType() {
-        return eventType;
+    public int getCdrId() {
+        return cdrId;
     }
 
-    public void setEventType(int eventType) {
-        this.eventType = eventType;
+    public void setCdrId(int cdrId) {
+        this.cdrId = cdrId;
     }
 
-    public float getAmount() {
-        return amount;
+    public float getCost() {
+        return cost;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public void setCost(float cost) {
+        this.cost = cost;
+    }
+
+    public float getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(float consumption) {
+        this.consumption = consumption;
     }
 
 }
