@@ -14,10 +14,9 @@ import java.sql.SQLException;
  * @author a7med
  */
 public class DatabaseConnection {
-    
-    private  final String url="jdbc:postgresql://blo19szvs1jhscgzh9x6-postgresql.services.clever-cloud.com:5432/blo19szvs1jhscgzh9x6";
-    private  final String userName="uixcvchkhlu70fcqjtsr";
-    private  final String pass="W04cefxfqlELk9bCnzbZ";
+    private  final String url="jdbc:postgresql://btxnhqatyjxgjkhmqgvg-postgresql.services.clever-cloud.com:5432/btxnhqatyjxgjkhmqgvg";
+    private  final String userName="ual1kyfaaahzvalnqmv6";
+    private  final String pass="s4ZDx5MEiWCrXYlDUx1A";
     
     private Connection connection ;
     private PreparedStatement preStm = null;
