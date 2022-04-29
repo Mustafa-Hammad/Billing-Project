@@ -7,11 +7,13 @@ package com.iti.ratingengine;
 import com.iti.database.DatabaseConnection;
 import com.iti.schema.CDR;
 import com.iti.schema.ServiceType;
-//import com.iti.schema.UDR;
+import com.iti.schema.UDR;
 import com.iti.schema.Zone;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +23,7 @@ public class Rating implements ServiceType, Zone {
 
     private final DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
     private CDR cdr;
-    //private UDR udr;
+    private UDR udr;
 
     private void setUDRTODB() {
     }
@@ -90,23 +92,77 @@ public class Rating implements ServiceType, Zone {
         }
         return 0;
     }
+    
+    private void setFreeUnitToBucket(float bucketConsumption,int conID){
+        
+        try {
+            PreparedStatement ps = db.getConnection().prepareStatement("update contract_onetimefee set consumtion=? where con_id=?");
+            ps.setInt(1,(int)bucketConsumption);
+            ps.setInt(2, conID);
+            ResultSet rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    
+    }
+    private void setFreeUnitToContract(float consumption,int conID){
+    
+    
+     }
+    
+   private int getContractId(String msisdn){
+        try {
+            PreparedStatement ps = db.getConnection().prepareStatement("select con_id from contract where msisdn=? ");
+            ps.setString(1, msisdn);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      return 0;
+   }
 
     private void callRating() {
         int zone = whichOperator();
         float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
-        float consumption = ((cdr.getConsumption() / 60) * externalCost)/100;
+        float consumption = (float)(Math.ceil(cdr.getConsumption() / 60) * externalCost)/100;
         cdr.setConsumption(consumption);
         //int fuFromRatePlan = getFreeUnitFromRatePlanDB(cdr.getRatePlanId(), CALL, zone);
         int fuFromContract = getFreeUnitFromContractDB(cdr.getDialA(), zone);
         if (fuFromContract == 0) {
             int fuFromBucket = getFreeUnitFromBucketDB(cdr.getDialA(), CALL, zone);
             if (fuFromBucket == 0) {
-// يبقي هنسيب الاسهتلاك عادي زي ما هو 
+                // يبقي هنسيب الاسهتلاك عادي زي ما هو 
+                udr.setCost(consumption);
+                      
             } else {
-// نخصم من الباقه الاضافيه  وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
+        // نخصم من الباقه الاضافيه  وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
+            float remaingBFU=(float)(fuFromBucket-Math.ceil(cdr.getConsumption()/60));
+               if(remaingBFU>=0){
+                    setFreeUnitToBucket(remaingBFU,getContractId(cdr.getDialA()));
+               }
+               else{
+                   setFreeUnitToBucket(0,getContractId(cdr.getDialA()));
+                   udr.setCost((-1*remaingBFU*externalCost)/100);
+               }
+               
             }
         } else {
 // نخصم من الباقه وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
+         float remaingFU=(float)(fuFromContract-Math.ceil(cdr.getConsumption()/60));
+               if(remaingFU>=0){
+                    setFreeUnitToContract(remaingFU,getContractId(cdr.getDialA()));
+                    //هنا محتاجه نعرف  الزون هل كدا ينفع اعمل كذا فانكشن ابديت
+               }
+               else{
+                   setFreeUnitToContract(0,getContractId(cdr.getDialA()));
+                   udr.setCost((-1*remaingFU*externalCost)/100);
+               }
+               
         }
     }
 
