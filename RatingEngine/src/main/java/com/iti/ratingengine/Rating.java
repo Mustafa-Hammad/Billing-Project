@@ -28,7 +28,7 @@ public class Rating implements ServiceType, Zone {
 
     private float getExternalCostFromDB(int RatePlan, int ServiceId, int zoneId) {
         try {
-            PreparedStatement ps = db.getConnection().prepareStatement("select externalCost from ratingPkg where RatePlan=? and ServiceId = ? and zoneId = ? ");
+            PreparedStatement ps = db.getConnection().prepareStatement("select externalcost from ratingPkg where rp_id=? and service_id = ? and zone_id = ? ");
             ps.setInt(1, RatePlan);
             ps.setInt(2, ServiceId);
             ps.setInt(3, zoneId);
@@ -61,13 +61,12 @@ public class Rating implements ServiceType, Zone {
 
     private int getFreeUnitFromContractDB(String MSISDN, int zoneId) {
         try {
-            String[] fuVoice = {"FUVoiceOnNet", "FUVoiceCrossNet", "FUVoiceInternational"};
-            PreparedStatement ps = db.getConnection().prepareStatement("select ? from contract where MSISDN=? ");
-            ps.setString(1, fuVoice[zoneId]);
-            ps.setString(2, MSISDN);
+            String[] fuVoice = {"fuvoiceonnet", "fuvoicecrossnet", "fuvoiceinternational"};
+            PreparedStatement ps = db.getConnection().prepareStatement("select fuvoiceonnet,fuvoicecrossnet,fuvoiceinternational from contract where msisdn=?");
+            ps.setString(1, MSISDN);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getInt(1);
+                return rs.getInt(zoneId);
             }
         } catch (SQLException e) {
             System.out.println("error - at getting FreeUnitFromContract from db : " + e);
@@ -95,7 +94,7 @@ public class Rating implements ServiceType, Zone {
     private void callRating() {
         int zone = whichOperator();
         float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
-        float consumption = cdr.getConsumption() / 60 * externalCost;
+        float consumption = ((cdr.getConsumption() / 60) * externalCost)/100;
         cdr.setConsumption(consumption);
         //int fuFromRatePlan = getFreeUnitFromRatePlanDB(cdr.getRatePlanId(), CALL, zone);
         int fuFromContract = getFreeUnitFromContractDB(cdr.getDialA(), zone);
@@ -119,7 +118,7 @@ public class Rating implements ServiceType, Zone {
 
     private int whichOperator() {
         String dialB = cdr.getDialB();
-        if (dialB.equalsIgnoreCase("002")) {
+        if (dialB.startsWith("002")) {
             char num = dialB.charAt(5);
 
             if (num == '0') {
@@ -134,14 +133,14 @@ public class Rating implements ServiceType, Zone {
 
     public void applyRating() {
         try {
-            PreparedStatement ps = db.getConnection().prepareStatement("select * from cdr where isRating=false");
+            PreparedStatement ps = db.getConnection().prepareStatement("select * from cdr where israting=false");
             ResultSet res = ps.executeQuery();
             while (res.next()) {
                 System.out.println("data");
 
                 cdr = new CDR(res.getInt(1), res.getString(2), res.getString(3), res.getDate(4), res.getString(5),
-                        res.getInt(6), res.getInt(7), res.getFloat(8), res.getFloat(9), res.getBoolean(10));
-
+                        res.getInt(6), res.getInt(7), res.getFloat(8), res.getInt(9), res.getBoolean(10));
+//                System.out.println(cdr.getServiceId()+"+++"+cdr.getCdrId());
                 switch (cdr.getServiceId()) {
                     case CALL:
                         callRating();

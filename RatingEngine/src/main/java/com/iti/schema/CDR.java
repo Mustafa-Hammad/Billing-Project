@@ -23,7 +23,7 @@ public class CDR {
     private boolean isRating;
     private float consumption;
 
-    public CDR(int cdrId, String dialA, String dialB, Date startDate, String timeStamp, int ratePlanId, int serviceId, float consumption, float externelCharge, boolean isRating) {
+    public CDR(int cdrId, String dialA, String dialB, Date startDate, String timeStamp, int ratePlanId, int serviceId, float consumption, int externelCharge, boolean isRating) {
         this.cdrId = cdrId;
         this.timeStamp = timeStamp;
         this.startDate = startDate;
