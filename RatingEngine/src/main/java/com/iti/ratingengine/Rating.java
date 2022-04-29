@@ -122,7 +122,7 @@ public class Rating implements ServiceType, Zone {
         if (dialB.equalsIgnoreCase("002")) {
             char num = dialB.charAt(5);
 
-            if (num == '0' || num == '6') {
+            if (num == '0') {
                 return ONNET;
             } else {
                 return CROSSNET;
