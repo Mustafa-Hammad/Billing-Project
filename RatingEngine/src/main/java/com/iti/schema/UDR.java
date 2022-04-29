@@ -14,7 +14,7 @@ public class UDR {
 
     private int udrId;
     private int cdrId;
-    private float contractId;
+    private int contractId;
     private String timeStamp;
     private Date startDate;
     private int dialA;
@@ -32,11 +32,11 @@ public class UDR {
         this.udrId = udrId;
     }
 
-    public float getContractId() {
+    public int getContractId() {
         return contractId;
     }
 
-    public void setContractId(float contractId) {
+    public void setContractId(int contractId) {
         this.contractId = contractId;
     }
 

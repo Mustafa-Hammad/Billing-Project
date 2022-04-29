@@ -7,10 +7,11 @@ package com.iti.ratingengine;
 import com.iti.database.DatabaseConnection;
 import com.iti.schema.CDR;
 import com.iti.schema.ServiceType;
-import com.iti.schema.UDR;
+//import com.iti.schema.UDR;
 import com.iti.schema.Zone;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -18,9 +19,9 @@ import java.sql.ResultSet;
  */
 public class Rating implements ServiceType, Zone {
 
-    private DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
+    private final DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
     private CDR cdr;
-    private UDR udr;
+    //private UDR udr;
 
     private void setUDRTODB() {
     }
@@ -35,28 +36,28 @@ public class Rating implements ServiceType, Zone {
             while (rs.next()) {
                 return rs.getFloat(1);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("error - at getting ExternalCost from db : " + e);
         }
         return 0;
 
     }
 
-    private int getFreeUnitFromRatePlanDB(int RatePlan, int ServiceId, int zoneId) {
-        try {
-            PreparedStatement ps = db.getConnection().prepareStatement("select FU from ratingPkg where RatePlan=? and ServiceId = ? and zoneId = ? ");
-            ps.setInt(1, RatePlan);
-            ps.setInt(2, ServiceId);
-            ps.setInt(3, zoneId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("error - at getting FreeUnitFromRatePlan from db : " + e);
-        }
-        return 0;
-    }
+//    private int getFreeUnitFromRatePlanDB(int RatePlan, int ServiceId, int zoneId) {
+//        try {
+//            PreparedStatement ps = db.getConnection().prepareStatement("select FU from ratingPkg where RatePlan=? and ServiceId = ? and zoneId = ? ");
+//            ps.setInt(1, RatePlan);
+//            ps.setInt(2, ServiceId);
+//            ps.setInt(3, zoneId);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                return rs.getInt(1);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("error - at getting FreeUnitFromRatePlan from db : " + e);
+//        }
+//        return 0;
+//    }
 
     private int getFreeUnitFromContractDB(String MSISDN, int zoneId) {
         try {
@@ -68,7 +69,7 @@ public class Rating implements ServiceType, Zone {
             while (rs.next()) {
                 return rs.getInt(1);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("error - at getting FreeUnitFromContract from db : " + e);
         }
         return 0;
@@ -85,7 +86,7 @@ public class Rating implements ServiceType, Zone {
             while (rs.next()) {
                 return rs.getInt(1);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("error - at getting FreeUnitFromBucket from db : " + e);
         }
         return 0;
@@ -96,7 +97,7 @@ public class Rating implements ServiceType, Zone {
         float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
         float consumption = cdr.getConsumption() / 60 * externalCost;
         cdr.setConsumption(consumption);
-        int fuFromRatePlan = getFreeUnitFromRatePlanDB(cdr.getRatePlanId(), CALL, zone);
+        //int fuFromRatePlan = getFreeUnitFromRatePlanDB(cdr.getRatePlanId(), CALL, zone);
         int fuFromContract = getFreeUnitFromContractDB(cdr.getDialA(), zone);
         if (fuFromContract == 0) {
             int fuFromBucket = getFreeUnitFromBucketDB(cdr.getDialA(), CALL, zone);
@@ -161,7 +162,7 @@ public class Rating implements ServiceType, Zone {
 
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("error - at getting cdr from db : " + e);
         }
     }

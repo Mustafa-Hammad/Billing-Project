@@ -1,115 +1,119 @@
 Database Creation
 
 
-CREATE TABLE Customer
-(
-  Cu_Id INT NOT NULL,
-  Name TEXT NOT NULL,
-  Address TEXT ,
-  email TEXT ,
-  Age int ,
-  credit int ,
-  PRIMARY KEY (Cu_Id)
-);
+create table customer (cu_id serial, Name text NOT NULL, 
+    email text unique, password text, PRIMARY KEY (cu_id) );
+############################################################################################
+create table customer_recurring (remaing int not null , 
+    cu_id int references customer(cu_id),
+    re_id int references recurring(re_id),
+    primary key (cu_id, re_id));
+############################################################################################
+create table recurring (re_id serial, product text not null , 
+    cost int not null, costPerMonth int not null, numberOfmonths int not null, 
+    PRIMARY KEY (re_id) );
+############################################################################################
+create table zone (zone_id serial , zone text not null unique, primary key (zone_id));
+############################################################################################
+create table service (service_id serial, serviceType text not null unique,primary key(service_id));
+############################################################################################
+create table RatePlan (rp_id serial, 
+    Name text not null unique,
+    monthlyFee int not null,
+    primary key (rp_id));
+############################################################################################
+create table ratingPkg (rpkg_id serial,
+    rp_id int not null,
+    zone_id int not null,
+    service_id int not null,
+    FOREIGN KEY (rp_id) references RatePlan(rp_id),
+    FOREIGN KEY (zone_id)  references zone(zone_id),
+    FOREIGN KEY (service_id)  references service(service_id),
+    fu int not null,
+    externalCost int not null,
+    primary key (rpkg_id));
+############################################################################################
+create table oneTimeFeeBucket (bucket_id serial,
+    zone_id int not null,
+    service_id int not null,
+    FOREIGN KEY (zone_id)  references zone(zone_id),
+    FOREIGN KEY (service_id)  references service(service_id),
+    cost int not null,
+    quota int not null,
+    primary key (bucket_id));
+############################################################################################
+create table contract (con_id serial,
+    msisdn text unique not null,
+    contractstate text not null,
+    criditLimit int default 1000,
+    billCycle text not null,
 
-CREATE TABLE Rate_Plan
-(
-  Rp_Id int NOT NULL,
-  Description TEXT ,
-  PRIMARY KEY (Rp_Id)
-);
+    fuvoiceonnet int default 0,
+    fuvoicecrossnet int default 0,
+    fuvoiceinternational int default 0,
 
-CREATE TABLE Service_Package
-(
-  Sp_Id int NOT NULL,
-  for_service TEXT ,
-  to_service TEXT ,
-  price FLOAT ,
-  value INT ,
-  PRIMARY KEY (Sp_Id)
-);
+    fusmsonnet int default 0,
+    fusmscrossnet int default 0,
+    fusmsinternational int default 0,
 
-CREATE TABLE Rate_Services
-(
-  Rp_Id INT NOT NULL,
-  Sp_Id INT NOT NULL,
-  PRIMARY KEY (Rp_Id, Sp_Id),
-  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
-  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
-);
+    fudata int default 0,
 
-CREATE TABLE Tariff_Zone
-(
-  T_Id int NOT NULL,
-  Country TEXT ,
-  Value INT ,
-  for_service TEXT ,
-  PRIMARY KEY (T_Id)
-);
+    rp_id int not null,
+    cu_id int not null,
+    FOREIGN KEY (rp_id)  references rateplan(rp_id),
+    FOREIGN KEY (cu_id)  references customer(cu_id),
 
-CREATE TABLE Extrenal_Charge
-(
-  Ex_Id int NOT NULL,
-  for_service INT ,
-  extra_value INT ,
-  PRIMARY KEY (Ex_Id)
-);
+    primary key (con_id));
 
-CREATE TABLE Recurring
-(
-  Rec_Id int NOT NULL,
-  Description TEXT ,
-  value INT ,
-  duration FLOAT ,
-  PRIMARY KEY (Rec_Id)
-);
+############################################################################################
+create table contract_oneTimeFee (con_otf serial,
+    con_id int not null,
+    bucket_id int not null,
+    FOREIGN KEY (con_id)  references contract(con_id),
+    FOREIGN KEY (bucket_id)  references oneTimeFeeBucket(bucket_id),
+    consumtion int not null,
+    primary key (con_otf));
 
-CREATE TABLE CDR
-(
-  CDR_Id int NOT NULL,
-  Start_Date DATE NOT NULL,
-  Start_Hour TIME NOT NULL,
-  Time_Stamp TIMESTAMP NOT NULL,
-  Event_Type INT NOT NULL,
-  Consumption INT NOT NULL,
-  MSISDN_A TEXT NOT NULL,
-  MSISDN_B TEXT NOT NULL,
-  Rp_Id INT NOT NULL,
-  Sp_Id INT NOT NULL,
-  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
-  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
-);
+############################################################################################
+create table cdr (cdr_id serial,
+    DialA text not null,
+    DialB text not null,
+    StartDate date not null,
+    timeStamp text not null,
 
-CREATE TABLE Contract
-(
-  Con_Id int NOT NULL,
-  MSISDN TEXT NOT NULL,
-  date DATE ,
-  credit_limit INT ,
-  Cu_Id INT NOT NULL,
-  Rp_Id INT NOT NULL,
-  PRIMARY KEY (Con_Id),
-  FOREIGN KEY (Cu_Id) REFERENCES Customer(Cu_Id),
-  FOREIGN KEY (Rp_Id) REFERENCES Rate_Plan(Rp_Id),
-  UNIQUE (MSISDN)
-);
+    rp_id int not null,
+    service_id int not null,
+    FOREIGN KEY (rp_id)  references rateplan(rp_id),
+    FOREIGN KEY (service_id)  references service(service_id),
+    
+    consumption float not null,
+    externelcharge int default 0,
+    isRating boolean default false,
 
-CREATE TABLE Recurring_Contract_Id
-(
-  Remaining INT ,
-  Con_Id INT NOT NULL,
-  Rec_Id INT NOT NULL,
-  FOREIGN KEY (Con_Id) REFERENCES Contract(Con_Id),
-  FOREIGN KEY (Rec_Id) REFERENCES Recurring(Rec_Id)
-);
+    primary key (cdr_id));
 
-CREATE TABLE One_Time_Fee_Contract_Id
-(
-  Con_Id INT NOT NULL,
-  Sp_Id INT NOT NULL,
-  FOREIGN KEY (Con_Id) REFERENCES Contract(Con_Id),
-  FOREIGN KEY (Sp_Id) REFERENCES Service_Package(Sp_Id)
-);
+
+############################################################################################
+
+create table udr (udr_id serial,
+    DialA text not null,
+    DialB text not null,
+    StartDate date not null,
+    timeStamp text not null,
+
+    rp_id int not null,
+    service_id int not null,
+    con_id int not null,
+
+    FOREIGN KEY (rp_id)  references rateplan(rp_id),
+    FOREIGN KEY (service_id)  references service(service_id),
+    FOREIGN KEY (con_id)  references contract(con_id),
+
+    consumption float not null,
+    cost int not null,
+
+    primary key (udr_id));
+
 
 
 
