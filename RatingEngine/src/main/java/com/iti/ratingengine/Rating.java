@@ -44,7 +44,7 @@ public class Rating implements ServiceType, Zone {
             ps.setFloat(8, uploadCDR.getConsumption());
             ps.setFloat(9, uploadCDR.getExternelCharge());
             int done = ps.executeUpdate();
-            System.out.println(done);
+            System.out.println("udr "+done);
         } catch (SQLException e) {
             System.out.println("error - at setting udr to db : " + e);
         }
@@ -97,7 +97,7 @@ public class Rating implements ServiceType, Zone {
         try {
             String[][] fu = {{"fuvoiceonnet", "fuvoicecrossnet", "fuvoiceinternational"},
             {"fusmsonnet", "fusmscrossnet", "fusmsinternational"},
-            {"fusmsinternational", "fusmsinternational", "fusmsinternational"}};
+            {"fudata", "fudata", "fudata"}};
 
             PreparedStatement ps = db.getConnection().prepareStatement("select " + fu[serviceId - 1][zoneId - 1] + " from contract where con_id=?");
             ps.setInt(1, con_id);
@@ -138,7 +138,7 @@ public class Rating implements ServiceType, Zone {
             ps.setInt(3, zoneId);
             ps.setInt(4, serviceId);
             int done = ps.executeUpdate();
-            System.out.println(done);
+            System.out.println("setFUB "+done);
         } catch (SQLException ex) {
             Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -148,13 +148,14 @@ public class Rating implements ServiceType, Zone {
     private void setFreeUnitToContract(float consumption, int conID, int serviceId, int zoneId) {
         try {
             String[][] fu = {{"fuvoiceonnet", "fuvoicecrossnet", "fuvoiceinternational"},
-            {"fusmsonnet", "fusmscrossnet", "fusmsinternational"}};
+            {"fusmsonnet", "fusmscrossnet", "fusmsinternational"},
+            {"fudata", "fudata", "fudata"}};
 
             PreparedStatement ps = db.getConnection().prepareStatement("update contract set " + fu[serviceId - 1][zoneId - 1] + "= ? where con_id=?");
             ps.setInt(1, (int) consumption);
             ps.setInt(2, conID);
             int done = ps.executeUpdate();
-            System.out.println(done);
+            System.out.println("set FU Con "+done);
 
         } catch (SQLException e) {
             System.out.println("error - at setFreeUnitFromContract from db : " + e);
@@ -177,7 +178,7 @@ public class Rating implements ServiceType, Zone {
     }
 
     private void checkBucketFU(int serviceId, int zone, float consumption, float externalCost) {
-
+        System.out.println("consumption "+consumption);
         int fuFromBucket = getFreeUnitFromBucketDB(udr.getContractId(), serviceId, zone);
         //System.out.println("fuFromBucket"+fuFromBucket);
         if (fuFromBucket == 0) {
@@ -188,6 +189,7 @@ public class Rating implements ServiceType, Zone {
         } else {
             // نخصم من الباقه الاضافيه  وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
             float remaingBFU = (float) (fuFromBucket - consumption);
+            System.out.println("remaingBFU "+remaingBFU);
             // System.out.println("-Math.ceil(cdr.getConsumption()/60)"+Math.ceil(cdr.getConsumption()/60));
             if (remaingBFU >= 0) {
                 setFreeUnitToBucket(remaingBFU, udr.getContractId(), serviceId, zone);
@@ -195,6 +197,8 @@ public class Rating implements ServiceType, Zone {
             } else {
                 setFreeUnitToBucket(0, udr.getContractId(), serviceId, zone);
                 cdr.setExternelCharge((-1 * remaingBFU * externalCost) / 100);
+                System.out.println("ExternelCharge "+cdr.getExternelCharge());
+                
             }
 
         }
@@ -228,17 +232,21 @@ public class Rating implements ServiceType, Zone {
 
     private int whichOperator() {
         String dialB = cdr.getDialB();
-        if (dialB.startsWith("002")) {
-            char num = dialB.charAt(5);
+        if (dialB.matches("\\d+")) {
+            if (dialB.startsWith("002")) {
+                char num = dialB.charAt(5);
 
-            if (num == '0') {
-                return ONNET;
+                if (num == '0') {
+                    return ONNET;
+                } else {
+                    return CROSSNET;
+                }
             } else {
-                return CROSSNET;
+                return INTERNATIONAL;
             }
-        } else {
-            return INTERNATIONAL;
         }
+
+        return DATAZONE;
     }
 
     public void applyRating() {
