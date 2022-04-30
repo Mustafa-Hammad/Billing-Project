@@ -16,8 +16,8 @@
         <h1><center>Administration Home Page</center></h1>
         <div id="home">
             <div id="href">
-                <a href="listUsers.jsp" target="_blank" id="aHome">List Users</a>
-                <a href="addUser.jsp" target="_blank">Add Users</a>
+                <a href="viewUser.jsp" target="_blank" id="aHome">List Users</a>
+                <a href="addUserForm.jsp" target="_blank">Add Users</a>
             </div>
         </div>
     </body>

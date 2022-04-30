@@ -18,10 +18,10 @@
                 db.getConnection();
 
                 String username = request.getParameter("name");
-                String address = request.getParameter("address");
+                String password = request.getParameter("pass");
                 String email = request.getParameter("email");
                 String credit = request.getParameter("credit");
-                    db.addUser(username, email, address, Integer.parseInt(credit));
+                    db.addUser(username, email, password, Integer.parseInt(credit));
                 
 %>
 <jsp:include page="addUserForm.jsp"></jsp:include>

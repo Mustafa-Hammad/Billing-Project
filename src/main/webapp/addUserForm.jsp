@@ -21,19 +21,21 @@
                     <tr>
                         <td>User Name: </td><td>
                         <input type="text" name="name"/></td>
-                    </tr>  
-                    <tr>
-                        <td>Address: </td>
-                        <td><input type="text" name="address"/></td>
-                    </tr>  
+                    </tr>   
                     <tr>
                         <td>Email:</td>
                         <td><input type="email" name="email"
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"></td>
+                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"></td>
                     </tr>
                     <tr>
+                        <td>Password </td>
+                        <td><input type="password" name="pass"
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/></td>
+                    </tr> 
+                    <tr>
                         <td>Credit:</td>
-                        <td><input type="text" name="credit"></td>
+                        <td><input type="text" name="credit"
+                                   pattern = "[0-9]+"></td>
                     </tr>
                </table>
                 <input type="submit">
