@@ -9,6 +9,7 @@ import com.iti.schema.CDR;
 import com.iti.schema.ServiceType;
 import com.iti.schema.UDR;
 import com.iti.schema.Zone;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,9 +24,29 @@ public class Rating implements ServiceType, Zone {
 
     private final DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
     private CDR cdr;
-    private UDR udr = new UDR();
+    private UDR udr;
 
-    private void setUDRTODB() {
+    public void Rating() {
+        udr = new UDR();
+    }
+
+    private void setUDRTODB(CDR uploadCDR, int conID) {
+        try {
+
+            PreparedStatement ps = db.getConnection().prepareStatement("insert into udr values(?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, uploadCDR.getDialA());
+            ps.setString(2, uploadCDR.getDialB());
+            ps.setDate(3, (Date) uploadCDR.getStartDate());
+            ps.setString(4, uploadCDR.getTimeStamp());
+            ps.setInt(5, uploadCDR.getRatePlanId());
+            ps.setInt(6, uploadCDR.getServiceId());
+            ps.setInt(7, conID);
+            ps.setFloat(8, uploadCDR.getConsumption());
+            ps.setFloat(9, uploadCDR.getExternelCharge());
+
+        } catch (SQLException e) {
+            System.out.println("error - at setting udr to db : " + e);
+        }
     }
 
     private float getExternalCostFromDB(int RatePlan, int ServiceId, int zoneId) {
@@ -142,24 +163,25 @@ public class Rating implements ServiceType, Zone {
         return 0;
     }
 
-    private void checkBucketFU(int serviceId, int zone, float consumptionLE, float consumption,float externalCost) {
+    private void checkBucketFU(int serviceId, int zone, float consumption, float externalCost) {
 
         int fuFromBucket = getFreeUnitFromBucketDB(udr.getContractId(), serviceId, zone);
         //System.out.println("fuFromBucket"+fuFromBucket);
         if (fuFromBucket == 0) {
             // يبقي هنسيب الاسهتلاك عادي زي ما هو 
-            udr.setCost(consumptionLE);
+            float consumptionLE = (consumption * externalCost) / 100;
+            cdr.setExternelCharge(consumptionLE);
 
         } else {
             // نخصم من الباقه الاضافيه  وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
-            float remaingBFU = (float) (fuFromBucket - Math.ceil(consumption / 60));
+            float remaingBFU = (float) (fuFromBucket - consumption);
             // System.out.println("-Math.ceil(cdr.getConsumption()/60)"+Math.ceil(cdr.getConsumption()/60));
             if (remaingBFU >= 0) {
                 setFreeUnitToBucket(remaingBFU, udr.getContractId(), serviceId, zone);
+                cdr.setExternelCharge(0);
             } else {
                 setFreeUnitToBucket(0, udr.getContractId(), serviceId, zone);
-                udr.setCost((-1 * remaingBFU * externalCost) / 100);
-                System.out.println("udrCost" + udr.getCost());
+                cdr.setExternelCharge((-1 * remaingBFU * externalCost) / 100);
             }
 
         }
@@ -168,30 +190,23 @@ public class Rating implements ServiceType, Zone {
 
     private void callRating() {
         int zone = whichOperator();
-        float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
-        //System.out.println("externalCost"+externalCost);
-        float consumptionLE = (float) (Math.ceil(cdr.getConsumption() / 60) * externalCost) / 100;
-        // System.out.println("consumption"+consumption);
-
-        cdr.setExternelCharge(consumptionLE);
         udr.setContractId(getContractId(cdr.getDialA()));
-        //int fuFromRatePlan = getFreeUnitFromRatePlanDB(cdr.getRatePlanId(), CALL, zone);
+        float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
+
         int fuFromContract = getFreeUnitFromContractDB(udr.getContractId(), CALL, zone);
         if (fuFromContract == 0) {
-            checkBucketFU(CALL, zone, consumptionLE, externalCost);
-
+            checkBucketFU(CALL, zone, cdr.getConsumption(), externalCost);
         } else {
-// نخصم من الباقه وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
-            float remaingFU = (float) (fuFromContract - Math.ceil(cdr.getConsumption() / 60));
+            // نخصم من الباقه وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
+            float remaingFU = (float) (fuFromContract - cdr.getConsumption());
             if (remaingFU >= 0) {
                 setFreeUnitToContract(remaingFU, udr.getContractId(), CALL, zone);
+                cdr.setExternelCharge(0);
                 //هنا محتاجه نعرف  الزون هل كدا ينفع اعمل كذا فانكشن ابديت
             } else {
                 setFreeUnitToContract(0, udr.getContractId(), CALL, zone);
-                checkBucketFU(CALL, zone, consumptionLE, externalCost);
-                //udr.setCost((-1 * remaingFU * externalCost) / 100);
+                checkBucketFU(CALL, zone, (-1 * remaingFU), externalCost);
             }
-
         }
     }
 
@@ -224,21 +239,21 @@ public class Rating implements ServiceType, Zone {
                 System.out.println("data");
 
                 cdr = new CDR(res.getInt(1), res.getString(2), res.getString(3), res.getDate(4), res.getString(5),
-                        res.getInt(6), res.getInt(7), res.getFloat(8), res.getInt(9), res.getBoolean(10));
+                        res.getInt(6), res.getInt(7), (float) Math.ceil(res.getFloat(8) / 60), res.getInt(9), res.getBoolean(10));
 //                System.out.println(cdr.getServiceId()+"+++"+cdr.getCdrId());
                 switch (cdr.getServiceId()) {
                     case CALL:
                         callRating();
-                        //  setUDRTODB();
+                        setUDRTODB(cdr, udr.getContractId());
 
                         break;
                     case SMS:
                         smsRating();
-                        setUDRTODB();
+                        setUDRTODB(cdr, udr.getContractId());
                         break;
                     case DATA:
                         dataRating();
-                        setUDRTODB();
+                        setUDRTODB(cdr, udr.getContractId());
                         break;
                     default:
                         System.out.println("error - not exsit service id ");
