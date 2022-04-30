@@ -24,12 +24,11 @@ public class Rating implements ServiceType, Zone {
 
     private final DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
     private CDR cdr;
-    private UDR udr=new UDR();
+    private UDR udr = new UDR();
 
 //    public void Rating() {
 //        udr = new UDR();
 //    }
-
     private void setUDRTODB(CDR uploadCDR, int conID) {
         try {
 
@@ -44,7 +43,8 @@ public class Rating implements ServiceType, Zone {
             ps.setInt(7, conID);
             ps.setFloat(8, uploadCDR.getConsumption());
             ps.setFloat(9, uploadCDR.getExternelCharge());
-            int done=ps.executeUpdate(); 
+            int done = ps.executeUpdate();
+            System.out.println(done);
         } catch (SQLException e) {
             System.out.println("error - at setting udr to db : " + e);
         }
@@ -53,14 +53,12 @@ public class Rating implements ServiceType, Zone {
     private void changeCDRIsRationg(int cdrId) {
         try {
             PreparedStatement ps = db.getConnection().prepareStatement("update cdr set israting=true where cdr_id=? ");
-            ps.setInt(1,cdrId);
-            int done= ps.executeUpdate();
-            System.out.println("cdr State "+done);
+            ps.setInt(1, cdrId);
+            int done = ps.executeUpdate();
+            System.out.println("cdr State " + done);
         } catch (SQLException ex) {
             Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
     }
 
     private float getExternalCostFromDB(int RatePlan, int ServiceId, int zoneId) {
@@ -98,7 +96,8 @@ public class Rating implements ServiceType, Zone {
     private int getFreeUnitFromContractDB(int con_id, int serviceId, int zoneId) {
         try {
             String[][] fu = {{"fuvoiceonnet", "fuvoicecrossnet", "fuvoiceinternational"},
-            {"fusmsonnet", "fusmscrossnet", "fusmsinternational"}};
+            {"fusmsonnet", "fusmscrossnet", "fusmsinternational"},
+            {"fusmsinternational", "fusmsinternational", "fusmsinternational"}};
 
             PreparedStatement ps = db.getConnection().prepareStatement("select " + fu[serviceId - 1][zoneId - 1] + " from contract where con_id=?");
             ps.setInt(1, con_id);
@@ -204,29 +203,26 @@ public class Rating implements ServiceType, Zone {
 
     private void rating(int ServiceId) {
         int zone = whichOperator();
-        System.out.println("zone"+zone);
+        System.out.println("zone" + zone);
         udr.setContractId(getContractId(cdr.getDialA()));
-        
+
         float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), ServiceId, zone);
 
-        int fuFromContract = getFreeUnitFromContractDB(udr.getContractId(),ServiceId, zone);
+        int fuFromContract = getFreeUnitFromContractDB(udr.getContractId(), ServiceId, zone);
         if (fuFromContract == 0) {
             checkBucketFU(ServiceId, zone, cdr.getConsumption(), externalCost);
         } else {
             // نخصم من الباقه وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
             float remaingFU = (float) (fuFromContract - cdr.getConsumption());
             if (remaingFU >= 0) {
-                setFreeUnitToContract(remaingFU, udr.getContractId(),ServiceId, zone);
+                setFreeUnitToContract(remaingFU, udr.getContractId(), ServiceId, zone);
                 cdr.setExternelCharge(0);
                 //هنا محتاجه نعرف  الزون هل كدا ينفع اعمل كذا فانكشن ابديت
             } else {
-                setFreeUnitToContract(0, udr.getContractId(),ServiceId, zone);
+                setFreeUnitToContract(0, udr.getContractId(), ServiceId, zone);
                 checkBucketFU(ServiceId, zone, (-1 * remaingFU), externalCost);
             }
         }
-    }
-
-    private void smsRating() {
     }
 
     private void dataRating() {
@@ -255,11 +251,11 @@ public class Rating implements ServiceType, Zone {
                 System.out.println("data");
 
                 cdr = new CDR(res.getInt(1), res.getString(2), res.getString(3), res.getDate(4), res.getString(5),
-                        res.getInt(6), res.getInt(7),res.getFloat(8), res.getInt(9), res.getBoolean(10));
+                        res.getInt(6), res.getInt(7), res.getFloat(8), res.getInt(9), res.getBoolean(10));
 //                System.out.println(cdr.getServiceId()+"+++"+cdr.getCdrId());
                 switch (cdr.getServiceId()) {
                     case CALL:
-                        cdr.setConsumption((float)Math.ceil(cdr.getConsumption()/60));
+                        cdr.setConsumption((float) Math.ceil(cdr.getConsumption() / 60));
                         rating(CALL);
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
@@ -271,7 +267,7 @@ public class Rating implements ServiceType, Zone {
                         changeCDRIsRationg(cdr.getCdrId());
                         break;
                     case DATA:
-                        cdr.setConsumption((float)Math.ceil(cdr.getConsumption()/1024));
+                        cdr.setConsumption((float) Math.ceil(cdr.getConsumption() / 1024));
                         dataRating();
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
@@ -295,7 +291,7 @@ public class Rating implements ServiceType, Zone {
             rating.applyRating();
 
         } catch (Exception e) {
-             Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Rating.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error - rating connection to db : " + e);
         }
     }

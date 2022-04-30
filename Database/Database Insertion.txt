@@ -29,3 +29,36 @@ insert into contract_onetimefee values (1,1,1,500);
 
 insert into cdr values (1,'00201093693045','00201066148699','29-04-2022','6:16',1,1,300,0,false);
 
+
+
+
+
+
+
+
+-- insert into contract values (1,'00201093693045','active',1000,'01',1000,500,60,250,250,10,12*1024,1,1);
+
+-- insert into contract_onetimefee values (1,1,1,500);
+
+-- insert into cdr values (1,'00201093693045','00201066148699','29-04-2022','6:16',1,1,300,0,false);
+
+-- insert into ratingpkg values (1,1,1,1,1000,19),(2,1,2,1,500,25),(3,1,3,1,60,500),
+--     (4,1,1,2,250,5),(5,1,2,2,250,10),(6,1,3,2,10,300),
+--     (7,1,1,3,12*1024,100);
+
+
+-- insert into contract values (2,'00201066148699','active',
+--     1000,'01',0,0,0,0,0,0,0,1,2);
+
+-- insert into contract_onetimefee values (2,2,1,20);
+-- insert into contract_onetimefee values (2,2,2,20);
+
+-- insert into cdr values (2,'00201066148699','00201093693045','29-04-2022','7:16',1,1,180,0,false);
+
+--insert into cdr values (3,'00201066148699','00201093693045','29-04-2022','7:16',1,1,9*60,0,false); 
+
+
+--- insert into cdr values (4,'00201066148699','00201093693045','29-04-2022','7:16',1,1,12*60,0,false); 
+
+
+
