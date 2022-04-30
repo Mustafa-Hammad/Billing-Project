@@ -33,7 +33,8 @@ public class Rating implements ServiceType, Zone {
     private void setUDRTODB(CDR uploadCDR, int conID) {
         try {
 
-            PreparedStatement ps = db.getConnection().prepareStatement("insert into udr values(?,?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = db.getConnection().prepareStatement("insert into udr (diala,dialb,startdate,timestamp,rp_id,service_id,con_id,consumption,cost)"
+                    + "                                                  values(?,?,?,?,?,?,?,?,?)");
             ps.setString(1, uploadCDR.getDialA());
             ps.setString(2, uploadCDR.getDialB());
             ps.setDate(3, (Date) uploadCDR.getStartDate());
@@ -43,7 +44,7 @@ public class Rating implements ServiceType, Zone {
             ps.setInt(7, conID);
             ps.setFloat(8, uploadCDR.getConsumption());
             ps.setFloat(9, uploadCDR.getExternelCharge());
-            int done=ps.executeUpdate();
+            int done=ps.executeUpdate(); 
         } catch (SQLException e) {
             System.out.println("error - at setting udr to db : " + e);
         }
@@ -201,26 +202,26 @@ public class Rating implements ServiceType, Zone {
 
     }
 
-    private void callRating() {
+    private void rating(int ServiceId) {
         int zone = whichOperator();
         System.out.println("zone"+zone);
         udr.setContractId(getContractId(cdr.getDialA()));
         
-        float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), CALL, zone);
+        float externalCost = getExternalCostFromDB(cdr.getRatePlanId(), ServiceId, zone);
 
-        int fuFromContract = getFreeUnitFromContractDB(udr.getContractId(), CALL, zone);
+        int fuFromContract = getFreeUnitFromContractDB(udr.getContractId(),ServiceId, zone);
         if (fuFromContract == 0) {
-            checkBucketFU(CALL, zone, cdr.getConsumption(), externalCost);
+            checkBucketFU(ServiceId, zone, cdr.getConsumption(), externalCost);
         } else {
             // نخصم من الباقه وكمان نتاكد اننا نخصم لو مش مكافيه نزود الفلوس
             float remaingFU = (float) (fuFromContract - cdr.getConsumption());
             if (remaingFU >= 0) {
-                setFreeUnitToContract(remaingFU, udr.getContractId(), CALL, zone);
+                setFreeUnitToContract(remaingFU, udr.getContractId(),ServiceId, zone);
                 cdr.setExternelCharge(0);
                 //هنا محتاجه نعرف  الزون هل كدا ينفع اعمل كذا فانكشن ابديت
             } else {
-                setFreeUnitToContract(0, udr.getContractId(), CALL, zone);
-                checkBucketFU(CALL, zone, (-1 * remaingFU), externalCost);
+                setFreeUnitToContract(0, udr.getContractId(),ServiceId, zone);
+                checkBucketFU(ServiceId, zone, (-1 * remaingFU), externalCost);
             }
         }
     }
@@ -254,23 +255,23 @@ public class Rating implements ServiceType, Zone {
                 System.out.println("data");
 
                 cdr = new CDR(res.getInt(1), res.getString(2), res.getString(3), res.getDate(4), res.getString(5),
-                        res.getInt(6), res.getInt(7), (float) Math.ceil(res.getFloat(8) / 60), res.getInt(9), res.getBoolean(10));
+                        res.getInt(6), res.getInt(7),res.getFloat(8), res.getInt(9), res.getBoolean(10));
 //                System.out.println(cdr.getServiceId()+"+++"+cdr.getCdrId());
                 switch (cdr.getServiceId()) {
                     case CALL:
-                        System.out.println("before call reating");
-                        callRating();
-                        System.out.println("after call reating");
+                        cdr.setConsumption((float)Math.ceil(cdr.getConsumption()/60));
+                        rating(CALL);
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
 
                         break;
                     case SMS:
-                        smsRating();
+                        rating(SMS);
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
                         break;
                     case DATA:
+                        cdr.setConsumption((float)Math.ceil(cdr.getConsumption()/1024));
                         dataRating();
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
