@@ -225,8 +225,6 @@ public class Rating implements ServiceType, Zone {
         }
     }
 
-    private void dataRating() {
-    }
 
     private int whichOperator() {
         String dialB = cdr.getDialB();
@@ -268,7 +266,7 @@ public class Rating implements ServiceType, Zone {
                         break;
                     case DATA:
                         cdr.setConsumption((float) Math.ceil(cdr.getConsumption() / 1024));
-                        dataRating();
+                        rating(DATA);
                         setUDRTODB(cdr, udr.getContractId());
                         changeCDRIsRationg(cdr.getCdrId());
                         break;
