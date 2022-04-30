@@ -9,6 +9,11 @@ create table customer_recurring (remaing int not null ,
     re_id int references recurring(re_id),
     primary key (cu_id, re_id));
 ############################################################################################
+create table cstmsisdn(
+id int,msisdn text,
+foreign key (id) references customer (cu_id),
+primary key (id, msisdn));
+############################################################################################
 create table recurring (re_id serial, product text not null , 
     cost int not null, costPerMonth int not null, numberOfmonths int not null, 
     PRIMARY KEY (re_id) );
