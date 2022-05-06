@@ -1,0 +1,65 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
+*/
+/* 
+    Created on : Apr 25, 2022, 5:10:55 PM
+    Author     : ahmedmedhat
+*/
+
+Body {
+    font-family: Calibri, Helvetica, sans-serif;
+    background-color: #f1f1f1;
+}
+            
+a:link, a:visited {
+  background-color: #BBBBBB;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: red;
+}
+
+
+
+div{
+    margin-bottom: 10px;
+    padding: 25px;
+    background-color: lightblue;
+    width: 50%;
+    margin-left: 25%;
+}
+div#mainR{
+    text-align: center;
+    background-color: #f1f1f1;
+}
+
+div#userForm{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#home{
+    padding: 25px;
+    background-color: lightblue;
+    /*height: 250px;*/
+    width: 50%;
+    margin-left: 25%;
+}
+
+div#href{
+    width: 50%;
+    text-align: center; 
+}
+
+thead#cstdata,
+tfoot#cstdata {
+    background-color: #333;
+    color: #fff;
+}
