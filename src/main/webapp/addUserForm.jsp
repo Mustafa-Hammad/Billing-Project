@@ -4,7 +4,6 @@
     Author     : ahmedmedhat
 --%>
 
-<%@page import="Database.DBConnection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,25 +19,26 @@
                <table>  
                     <tr>
                         <td>User Name: </td><td>
-                        <input type="text" name="name"/></td>
+                        <input type="text" name="name"
+                                pattern=".{5,25}"/></td>
                     </tr>   
                     <tr>
                         <td>Email:</td>
                         <td><input type="email" name="email"
-                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"></td>
+                                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$"></td>
                     </tr>
                     <tr>
                         <td>Password </td>
                         <td><input type="password" name="pass"
-                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/></td>
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"/></td>
                     </tr> 
                     <tr>
                         <td>Credit:</td>
-                        <td><input type="text" name="credit"
-                                   pattern = "[0-9]+"></td>
+                        <td><input type="text" name="credit" 
+                                   minlength="1" pattern = "[0-9]+"></td>
                     </tr>
                </table>
-                <input type="submit">
+                <input type="submit" value="Check"></input>
             </form>  
         </div>
         <div id="mainR">

@@ -13,17 +13,19 @@
         <title>Add User</title>
     </head>
     <body>
-         <%
+        <%
             DBConnection db = new DBConnection();
-                db.getConnection();
+            db.getConnection();
 
-                String username = request.getParameter("name");
-                String password = request.getParameter("pass");
-                String email = request.getParameter("email");
-                String credit = request.getParameter("credit");
-                    db.addUser(username, email, password, Integer.parseInt(credit));
+            String username = request.getParameter("name");
+            String password = request.getParameter("pass");
+            String email = request.getParameter("email");
+            String credit = request.getParameter("credit");
                 
-%>
-<jsp:include page="addUserForm.jsp"></jsp:include>
+            db.addUser(username, email, password, Integer.parseInt(credit));
+            
+        %>
+        <jsp:include page="addUserForm.jsp"></jsp:include>
+
     </body>
 </html>

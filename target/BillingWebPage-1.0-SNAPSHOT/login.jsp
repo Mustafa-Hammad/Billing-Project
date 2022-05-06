@@ -23,6 +23,7 @@
     boolean b = db.checkLogin(username, password);
     if(b){
         out.print("login sucsseful");
+        response.sendRedirect("mainPage.jsp");
     }else{
         out.print("<p style='color:Red'>Invalid Login</p>");
     }

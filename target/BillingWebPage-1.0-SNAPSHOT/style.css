@@ -57,3 +57,9 @@ div#href{
     width: 50%;
     text-align: center; 
 }
+
+thead#cstdata,
+tfoot#cstdata {
+    background-color: #333;
+    color: #fff;
+}

@@ -1,18 +1,17 @@
 <%-- 
-    Document   : reatePlanAction
-    Created on : Apr 29, 2022, 4:14:24 PM
+    Document   : editUserForm
+    Created on : Apr 30, 2022, 2:35:13 AM
     Author     : ahmedmedhat
 --%>
-<%@page import="Database.DBConnection"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Rate Plan</title>
+        <title>JSP Page</title>
     </head>
     <body>
-        <jsp:include>
+        <h1>Hello World!</h1>
     </body>
 </html>
