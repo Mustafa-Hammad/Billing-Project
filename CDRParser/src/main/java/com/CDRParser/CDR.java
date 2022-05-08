@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iti.schema;
+package com.CDRParser;
 
 import java.util.Date;
 
 /**
  *
- * @author nora
+ * @author a7med
  */
 public class CDR {
 
@@ -23,7 +23,7 @@ public class CDR {
     private boolean isRating;
     private float consumption;
 
-    public CDR(int cdrId, String dialA, String dialB, Date startDate, String timeStamp, int ratePlanId, int serviceId, float consumption, float externelCharge, boolean isRating) {
+    public CDR(int cdrId, String dialA, String dialB, Date startDate, String timeStamp, int ratePlanId, int serviceId, float consumption, int externelCharge, boolean isRating) {
         this.cdrId = cdrId;
         this.timeStamp = timeStamp;
         this.startDate = startDate;
@@ -33,6 +33,14 @@ public class CDR {
         this.ratePlanId = ratePlanId;
         this.externelCharge = externelCharge;
         this.isRating = isRating;
+        this.consumption = consumption;
+    }
+
+    public float getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(float consumption) {
         this.consumption = consumption;
     }
 
@@ -107,15 +115,5 @@ public class CDR {
     public void setIsRating(boolean isRating) {
         this.isRating = isRating;
     }
-
-    public float getConsumption() {
-        return consumption;
-    }
-
-    public void setConsumption(float consumption) {
-        this.consumption = consumption;
-    }
-
-    
 
 }
