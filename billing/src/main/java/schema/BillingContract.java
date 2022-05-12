@@ -9,29 +9,39 @@ package schema;
  * @author asmaaMohamed
  */
 public class BillingContract {
-    
-   private  String msisdn; 
-   private String rp ;
-   private int costRP ;
-   private int costOneTimeFee; 
-   private int costRecurring ;
-   private float costExternalCharge ;
-   private float priceAfterTax ;
-   private  float  priceBeforeTax ;
-   private  int usedFuVOnnet ;
-   private  int usedFuVcrossnet ;
-   private  int usedFuVinter ; 
-   private int usedFuSOnnet ;
-   private int usedFuScrossnet ;
-   private int usedFuSinter; 
-   private int usedFuData ;
-   private  int FuVOnnet ;
-   private int FuVcrossnet ;
-   private int FuVinter ; 
-   private int FuSOnnet ; 
-   private int FuScrossnet ;
-   private  int FuSinter;
-   private  int FuData ;
+
+    private String msisdn;
+    private int cuid;
+    private String rp;
+    private int costRP;
+    private int costOneTimeFee;
+    private int costRecurring;
+    private float costExternalCharge;
+    private float priceAfterTax;
+    private float priceBeforeTax;
+    private int usedFuVOnnet;
+    private int usedFuVcrossnet;
+    private int usedFuVinter;
+    private int usedFuSOnnet;
+    private int usedFuScrossnet;
+    private int usedFuSinter;
+    private int usedFuData;
+    private int FuVOnnet;
+    private int FuVcrossnet;
+    private int FuVinter;
+    private int FuSOnnet;
+    private int FuScrossnet;
+    private int FuSinter;
+    private int FuData;
+
+
+    public int getCuid() {
+        return cuid;
+    }
+
+    public void setCuid(int cuid) {
+        this.cuid = cuid;
+    }
 
     public void setMsisdn(String msisdn) {
         this.msisdn = msisdn;
@@ -208,7 +218,5 @@ public class BillingContract {
     public int getFuData() {
         return FuData;
     }
-   
-   
-    
+
 }

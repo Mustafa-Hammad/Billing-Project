@@ -11,9 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import schema.Customer;
+import schema.RatePlan;
 
 /**
  *
@@ -141,6 +143,62 @@ public class BillingHandeller {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    // getAllRatePlan
+    public RatePlan getRatePlan(int rp_id) {
+        RatePlan ratePlan = new RatePlan();
+        ratePlan.setId(rp_id);
+        try {
+            preStm = db.getConnection().prepareStatement("select name,monthlyfee from rateplan where rp_id = ?");
+            preStm.setInt(1, rp_id);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                ratePlan.setName(rs.getString(1));
+                ratePlan.setMonthlyfee(rs.getInt(2));
+                ratePlan = getDetailsRatePlanByID(ratePlan);
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return ratePlan;
+    }
+
+    // getAllRatePlan
+    public RatePlan getDetailsRatePlanByID(RatePlan ratePlan) {
+
+        try {
+            preStm = db.getConnection().prepareStatement("select service_id,zone_id,fu from ratingpkg where rp_id = ?");
+            preStm.setInt(1, ratePlan.getId());
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                if (rs.getInt(1) == 1 && rs.getInt(2) == 1) {
+                    ratePlan.setFuVOnNet(rs.getInt(3));
+                } else if (rs.getInt(1) == 1 && rs.getInt(2) == 2) {
+                    ratePlan.setFuVOnCross(rs.getInt(3));
+                } else if (rs.getInt(1) == 1 && rs.getInt(2) == 3) {
+                    ratePlan.setFvVInter(rs.getInt(3));
+                } else if (rs.getInt(1) == 2 && rs.getInt(2) == 1) {
+                    ratePlan.setFuSOnNet(rs.getInt(3));
+                } else if (rs.getInt(1) == 2 && rs.getInt(2) == 2) {
+                    ratePlan.setFuSOnCross(rs.getInt(3));
+                } else if (rs.getInt(1) == 2 && rs.getInt(2) == 3) {
+                    ratePlan.setFvSInter(rs.getInt(3));
+                } else {
+                    ratePlan.setFvData(rs.getInt(3));
+                }
+
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return ratePlan;
     }
 
 }
