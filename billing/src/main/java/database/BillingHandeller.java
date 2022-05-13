@@ -90,61 +90,85 @@ public class BillingHandeller {
 
     }
 
-    public void getCustomerInfo(String msisdn) {
-
+    public int getOnTimeFeesCost(int conId) {
         try {
-            preStm = db.getConnection().prepareStatement("select cu.name, cu.email,c.cu_id, c.rp_id,con_id from customer as cu ,contract as c where c.msisdn=? and cu.cu_id = c.cu_id ");
-            preStm.setString(1, msisdn);
-            rs = preStm.executeQuery();
+            preStm = db.getConnection().prepareStatement("select sum(otf.cost) from onetimefeebucket as otf,contract_onetimefee as con_otf where con_otf.con_id =? con_otf.bucket_id=otf.bucket_id ");
+            preStm.setInt(1, conId);
             while (rs.next()) {
-
-                customerInfo.put("CustomerName", rs.getString(1));
-                customerInfo.put("CustomerEmail", rs.getString(2));
-                customerInfo.put("CustomerId", Integer.toString(rs.getInt(3)));
-                customerInfo.put("CustomerRatePlanId", Integer.toString(rs.getInt(4)));
-                customerInfo.put("ContractId", Integer.toString(rs.getInt(5)));
-
+                return rs.getInt(1);
             }
-
         } catch (SQLException ex) {
-            System.out.println("com.mycompany.pdf.DatabaseConnection.getCustomerInfo()");
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return 0;
     }
 
-    public void getRecurringCost(int custumerId) {
+    public int getRecurringCost(int custumerId) {
         try {
             preStm = db.getConnection().prepareStatement("select sum(rec.costpermonth) from recurring as rec ,customer_recurring as cRec where cRec.cu_id=? and rec.re_id=cRec.re_id ");
             preStm.setInt(1, custumerId);
             rs = preStm.executeQuery();
             while (rs.next()) {
 
-                customerInfo.put("RecurringCost", Integer.toString(rs.getInt(1)));
+                return rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return 0;
     }
 
-    public void getMsisdnsForCustomer(int customerId) {
+    public void updateRecurringCost(int customerId) {
         try {
-            preStm = db.getConnection().prepareStatement("select count(msisdn) from contract where cu_id=? ");
+            preStm = db.getConnection().prepareStatement("update customer_recurring  set remaing = remaing - (select costPermonth from recurring as rec ,customer_recurring cu_rec where cu_rec.cu_id=? and cu_rec.re_id=rec.re_id)"
+                    + " from customer_recurring where cu_id=? ");
             preStm.setInt(1, customerId);
-            rs = preStm.executeQuery();
-            while (rs.next()) {
-
-                customerInfo.put("NumberOfMsisdn", Integer.toString(rs.getInt(1)));
-
-            }
-
+            preStm.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
+//    public void getCustomerInfo(String msisdn) {
+//
+//        try {
+//            preStm = db.getConnection().prepareStatement("select cu.name, cu.email,c.cu_id, c.rp_id,con_id from customer as cu ,contract as c where c.msisdn=? and cu.cu_id = c.cu_id ");
+//            preStm.setString(1, msisdn);
+//            rs = preStm.executeQuery();
+//            while (rs.next()) {
+//
+//                customerInfo.put("CustomerName", rs.getString(1));
+//                customerInfo.put("CustomerEmail", rs.getString(2));
+//                customerInfo.put("CustomerId", Integer.toString(rs.getInt(3)));
+//                customerInfo.put("CustomerRatePlanId", Integer.toString(rs.getInt(4)));
+//                customerInfo.put("ContractId", Integer.toString(rs.getInt(5)));
+//
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.out.println("com.mycompany.pdf.DatabaseConnection.getCustomerInfo()");
+//            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+//    public void getMsisdnsForCustomer(int customerId) {
+//        try {
+//            preStm = db.getConnection().prepareStatement("select count(msisdn) from contract where cu_id=? ");
+//            preStm.setInt(1, customerId);
+//            rs = preStm.executeQuery();
+//            while (rs.next()) {
+//
+//                customerInfo.put("NumberOfMsisdn", Integer.toString(rs.getInt(1)));
+//
+//            }
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
     // getAllRatePlan
     public RatePlan getRatePlan(int rp_id) {
         RatePlan ratePlan = new RatePlan();
