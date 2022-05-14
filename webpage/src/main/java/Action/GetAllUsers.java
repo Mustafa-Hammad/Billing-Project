@@ -5,42 +5,35 @@
 package Action;
 
 import Database.HandleDB;
+import Schema.Customer;
+//import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//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
 /**
  *
- * @author ahmedmedhat
+ * @author nora
  */
-public class CheckLogin extends HttpServlet {
-
-    @Override
+public class GetAllUsers extends HttpServlet {
+ @Override
     public void init() {
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
         HandleDB db = new HandleDB();
         PrintWriter pw = res.getWriter();
-        String userName = req.getParameter("username");
-        String password = req.getParameter("password");
-        boolean isLogin = db.checkLogin(userName, password);
-        if (isLogin) {
 
-            HttpSession session = req.getSession(true);
-            session.setAttribute("isAuth", "true");
-            session.setAttribute("name", userName);
-            pw.print("true");
-
-        } else {
-            pw.print("false");
-
-        }
+        Vector<Customer> customers = db.getAllUsers();
+//        Gson gson = new Gson();
+//        String allCustomerS = gson.toJson(customers);
+//        pw.println(allCustomerS);
     }
 }
