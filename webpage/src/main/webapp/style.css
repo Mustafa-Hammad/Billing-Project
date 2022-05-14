@@ -14,7 +14,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
     box-sizing: border-box;
 }
 
-Body {
+body {
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    justify-content: space-between;
     font-family: Calibri, Helvetica, sans-serif;
     background-color: #f1f1f1;
 }
