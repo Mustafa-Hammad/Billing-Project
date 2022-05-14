@@ -4,7 +4,7 @@
     Author     : ahmedmedhat
 --%>
 
-<%@page import="Database.DBConnection"%>
+<%@page import="Database.HandleDB"%>
 <jsp:useBean id="u" class="User.User"></jsp:useBean>  
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,8 +16,7 @@
     <body>
         <%
 
-            DBConnection db = new DBConnection();
-            db.getConnection();
+            HandleDB db = new HandleDB();
 
             String queryString = request.getQueryString();          // d=789
             StringBuilder url = new StringBuilder();
