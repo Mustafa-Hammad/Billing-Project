@@ -13,6 +13,11 @@
 
 <div class="viewUsers">
     <h1><center>All Customers Data</center></h1>
+
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+
+
+
     <table class="table table-hover">
         <thead>
             <tr>
@@ -24,7 +29,7 @@
                 <th>Recurring</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="myTable">
             <%
                 HandleDB db = new HandleDB();
                 Vector<Customer> customers = db.getAllUsers();
@@ -45,5 +50,16 @@
     </table>
 </div>
 <%@ include file="footer.html" %>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
 
 <%@ include file="footerBody.html" %>

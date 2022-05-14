@@ -78,7 +78,7 @@ Body {
 
 
 /*add user form page*/
-.addUser-form, .viewDetailsUser, .viewUsers, .addRate-form{
+.addUser-form, .viewDetailsUser, .viewUsers, .addRate-form, .main-page{
     display: flex;
     flex-flow: column;
     place-items: center;

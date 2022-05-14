@@ -12,11 +12,9 @@
         <url-pattern>/detailsUser.jsp</url-pattern>
         <url-pattern>/displayUserRecurring.jsp</url-pattern>
         <url-pattern>/addRatePlan.jsp</url-pattern>
-        
         <url-pattern>/addOneTimeFeeFormat.jsp</url-pattern>
         <url-pattern>/viewOneTimeFee.jsp</url-pattern>
         <url-pattern>/viewAllRecurring.jsp</url-pattern>
-
     </filter-mapping>
     <listener>
         <description>ServletContextListener</description>
@@ -55,6 +53,10 @@
         <servlet-name>CheckAddCustomerRecurring</servlet-name>
         <servlet-class>Action.CheckAddCustomerRecurring</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckNationalId</servlet-name>
+        <servlet-class>Action.CheckNationalId</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CheckLogin</servlet-name>
         <url-pattern>/CheckLogin</url-pattern>
@@ -86,6 +88,10 @@
     <servlet-mapping>
         <servlet-name>CheckAddCustomerRecurring</servlet-name>
         <url-pattern>/CheckAddCustomerRecurring</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckNationalId</servlet-name>
+        <url-pattern>/CheckNationalId</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

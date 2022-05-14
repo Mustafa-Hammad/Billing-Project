@@ -48,6 +48,36 @@ public class HandleDB {
         return st;
     }
 
+
+
+    public String checkCuid(int cuid) {
+        String res = "false___"+cuid+" doesn't exsit";
+        try {
+            ps = db.getConnection().prepareStatement("select cu_id,name,email from customer where cu_id = ? ");
+            ps.setInt(1, cuid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return "true___"+rs.getInt(1)+"___"+rs.getString(2)+"___"+rs.getString(3);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, e);
+
+            if (e.getSQLState().equals("23505")) {
+                String msg = e.getMessage();
+                String whichError = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
+//                System.out.println(" :  " + whichError);
+                res = "false___" + whichError + " already exist";
+            } else {
+                res = "false___please try again";
+//                System.out.println("false___please try again");
+            }
+        }
+        return res;
+    }
+
+
+
+
     public String addUser(String username, String email, String password, int cuid) {
         String res = "false___please try again";
         try {
@@ -89,27 +119,6 @@ public class HandleDB {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    public List<String> getMSISDN(int id) {
-        List<String> msisdn = new ArrayList<>();
-        try {
-            String query = "select msisdn from cstmsisdn"
-                    + " where id=?";
-            ps = db.getConnection().prepareStatement(query);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
-            int x = 0;
-            while (rs.next()) {
-                x++;
-                //retreive data by column name
-                msisdn.add(x, rs.getString("msisdn"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return msisdn;
     }
 
 
