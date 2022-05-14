@@ -35,6 +35,12 @@ public class Billing {
             customer.setName(cu.getName());
             billingContract.setCuid(cu.getCustomerId());
             billingContract.setCostRecurring(cu.getCustomerId());
+            if(bH.getRemaingRecurringMonth(cu.getCustomerId())==0){
+                bH.resetrecurring(cu.getCustomerId());
+            }
+            else{
+                bH.updateRecurringMonths(cu.getCustomerId());
+            }
         }
     }
 
@@ -81,10 +87,11 @@ public class Billing {
 
             // get one time fee => total cost 
             billingContract.setCostOneTimeFee(bH.getOnTimeFeesCost(c.getId()));
+            bH.resetOnTimefeeBucket(c.getId());
 
             // set one time fee details to table billing details one time fee
             // get recurring => total cost and decrease one from number of month 
-           
+              
             // set recurring details to table billing details recurring
             // rate plan cost tax after
             billingContract.setPriceAfterTax((float) (detailsRP.getMonthlyfee() * 1.1));

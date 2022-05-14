@@ -103,6 +103,18 @@ public class BillingHandeller {
 
         return 0;
     }
+    public void resetOnTimefeeBucket(int conId){
+        
+        try {
+            preStm = db.getConnection().prepareStatement("DELETE FROM contract_ontimefee WHERE con_id=?");
+            preStm.setInt(1, conId);
+            preStm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    }
 
     public int getRecurringCost(int custumerId) {
         try {
@@ -119,16 +131,44 @@ public class BillingHandeller {
         return 0;
     }
 
-    public void updateRecurringCost(int customerId) {
+    public void updateRecurringMonths(int customerId) {
         try {
-            preStm = db.getConnection().prepareStatement("update customer_recurring  set remaing = remaing - (select costPermonth from recurring as rec ,customer_recurring cu_rec where cu_rec.cu_id=? and cu_rec.re_id=rec.re_id)"
-                    + " from customer_recurring where cu_id=? ");
+            preStm = db.getConnection().prepareStatement("update customer_recurring  set remaing = remaing - 1 from customer_recurring where cu_id=? ");
             preStm.setInt(1, customerId);
             preStm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public int getRemaingRecurringMonth(int cID){
+        
+        try {
+            preStm = db.getConnection().prepareStatement("select cRec.remaing from recurring as rec ,customer_recurring as cRec where cRec.cu_id=? and rec.re_id=cRec.re_id ");
+            preStm.setInt(1, cID);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return 0;
+               
+    }
+     public void resetrecurring(int cId){
+        
+        try {
+            preStm = db.getConnection().prepareStatement("DELETE FROM customer_recurring WHERE cu_id=?");
+            preStm.setInt(1, cId);
+            preStm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BillingHandeller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
     }
 
 //    public void getCustomerInfo(String msisdn) {
