@@ -520,7 +520,7 @@ public class HandleDB {
             if (rs.next()) {
                 for (ServiceT service : services) {
                     if (Integer.parseInt(service.getFu()) != 0 && Integer.parseInt(service.getExternalCost()) != 0) {
-                        resFromRatingpkg = addRatingpkg(rs.getInt(1), service.getService(), service.getZone(),
+                        resFromRatingpkg = addRatingpkg(rs.getInt(1), service.getZone(), service.getService(),
                                 Integer.parseInt(service.getFu()), Integer.parseInt(service.getExternalCost()));
                     }
                     if (!resFromRatingpkg) {
