@@ -155,7 +155,26 @@ public class Invoice {
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             JasperPrint jprint = (JasperPrint) JasperFillManager.fillReport(jasperReport, hm, new JREmptyDataSource());
             JasperExportManager.exportReportToPdfFile(jprint, fileNamePdf);
-//             Sender's email ID needs to be mentioned
+            sendemail();
+        } catch (JRException e) {
+            System.out.print("Exception:" + e);
+        }
+    }
+
+    public void getMsisdn() throws SQLException {
+        PreparedStatement ps = db.getConnection().prepareStatement("select msisdn from  billingcontract ");
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+
+            new Invoice().getAllContractsData(rs.getString(1));
+        }
+
+    }
+    
+    public void sendemail(){
+
+        // Sender's email ID needs to be mentioned
         String from = "project.billingiti@gmail.com";
 
         // Assuming you are sending email from through gmails smtp
@@ -219,90 +238,7 @@ public class Invoice {
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
         }
-
-        } catch (JRException e) {
-            System.out.print("Exception:" + e);
-        }
     }
-
-    public void getMsisdn() throws SQLException {
-        PreparedStatement ps = db.getConnection().prepareStatement("select msisdn from  billingcontract ");
-
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-
-            new Invoice().getAllContractsData(rs.getString(1));
-        }
-
-    }
-    
-//    public void sendemail(String to, String file){
-//
-//        // Sender's email ID needs to be mentioned
-//        String from = "eng.mustafa.hammad@gmail.com";
-//
-//        // Assuming you are sending email from through gmails smtp
-//        String host = "smtp.gmail.com";
-//
-//        // Get system properties
-//        Properties properties = System.getProperties();
-//
-//        // Setup mail server
-//        properties.put("mail.smtp.host", host);
-//        properties.put("mail.smtp.port", "465");
-//        properties.put("mail.smtp.ssl.enable", "true");
-//        properties.put("mail.smtp.auth", "true");
-//
-//        // Get the Session object.// and pass 
-//        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-//
-//            @Override
-//            protected PasswordAuthentication getPasswordAuthentication() {
-//
-//                return new PasswordAuthentication("eng.mustafa.hammad@gmail.com", "96988053mustafa");
-//
-//            }
-//
-//        });
-//        //session.setDebug(true);
-//        try {
-//            // Create a default MimeMessage object.
-//            MimeMessage message = new MimeMessage(session);
-//
-//            // Set From: header field of the header.
-//            message.setFrom(new InternetAddress(from));
-//
-//            // Set To: header field of the header.
-//            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-//
-//            // Set Subject: header field
-//            message.setSubject("Vodafone Monthly Bill");
-//
-//            Multipart multipart = new MimeMultipart();
-//
-//            MimeBodyPart attachmentPart = new MimeBodyPart();
-//
-//            MimeBodyPart textPart = new MimeBodyPart();
-//
-//            try {
-//
-//                attachmentPart.attachFile(file);
-//                textPart.setText("We would like to inform you that it is time to pay the monthly bill, please find the file attached to the mail. For more information, please contact us.");
-//                multipart.addBodyPart(textPart);
-//                multipart.addBodyPart(attachmentPart);
-//
-//            } catch (IOException e) {
-//            }
-//
-//            message.setContent(multipart);
-//
-//            System.out.println("sending...");
-//            // Send message
-//            Transport.send(message);
-//            System.out.println("Sent message successfully....");
-//        } catch (MessagingException mex) {
-//        }
-//    }
 
     public static void main(String[] args) {
         try {
