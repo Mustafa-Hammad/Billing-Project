@@ -452,7 +452,7 @@ public class HandleDB {
             RatePlan ratePlans = getDetailsRatePlanByID(Integer.parseInt(rpid));
             //Cu_Id serial, name string, address string, cridet int
             ps = db.getConnection().prepareStatement("insert into contract (msisdn,contractstate,billCycle,fuvoiceonnet,fuvoicecrossnet,fuvoiceinternational,fusmsonnet,fusmscrossnet,fusmsinternational,fudata ,rp_id ,cu_id) values(?,?, ?, ?,?,?,?,?, ?,?,?,?)");
-            ps.setInt(1, Integer.parseInt(msisdn));
+            ps.setString(1, msisdn);
             ps.setString(2, "active");
             ps.setString(3, "15");
             ps.setInt(4, ratePlans.getFuVOnNet());
