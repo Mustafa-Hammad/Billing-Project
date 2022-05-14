@@ -127,14 +127,15 @@
         </div>
         <% }%>
         
-        
+        <div class="card" >
         <%
         Vector<OneTimeFeeForCst> oneTF = db.getOneTimeFeePlanWithAllDetailsForCustomer(uID);
         for (OneTimeFeeForCst oTF : oneTF) {%>
-        <div class="card">
+        
             <div class="card-header">
                 <p> Contract of One Fee Time :  <%=oTF.getContractOTFID()%></p>
                 <p> Contract of Customer :  <%=oTF.getContractID()%></p>
+            </div>    
             <div class="card-body">
                 <table class="table table-hover">
                     <tbody>
@@ -151,11 +152,13 @@
                     </tbody>
                 </table>
             </div> 
-        </div>
+        
         <% }%>
-    </div>
-
+   </div>
 </div>
+
+
+        
 <%@ include file="footer.html" %>
 
 
