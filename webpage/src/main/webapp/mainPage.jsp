@@ -5,20 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <style><%@include file="./style.css"%></style>
-        <title>Main Page</title>
-    </head>
-    <body>
-        <h1><center>Administration Home Page</center></h1>
-        <div id="home">
-            <div id="href">
-                <a href="viewUser.jsp" target="_blank" id="aHome">List Users</a>
-                <a href="addUserForm.jsp" target="_blank">Add Users</a>
-            </div>
-        </div>
-    </body>
-</html>
+<%@ include file="header.html" %>
+<div class="main-page">
+
+    <h1><center>Administration Home Page</center></h1>
+    search by phone to view contract
+
+</div>
+<%@ include file="footer.html" %>
+<%@ include file="footerBody.html" %>
+

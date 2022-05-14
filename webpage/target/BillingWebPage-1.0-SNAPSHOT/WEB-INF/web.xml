@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>Config.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/mainPage.jsp</url-pattern>
+        <!--<url-pattern>/login.jsp</url-pattern>-->
+    </filter-mapping>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>Config.HandleListenerContext</listener-class>
+    </listener>
     <servlet>
         <servlet-name>CheckLogin</servlet-name>
         <servlet-class>Action.CheckLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HandleInitServer</servlet-name>
+        <servlet-class>Config.HandleInitServer</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckAddUser</servlet-name>
+        <servlet-class>Action.CheckAddUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetAllUsers</servlet-name>
+        <servlet-class>Action.GetAllUsers</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckAddContract</servlet-name>
+        <servlet-class>Action.CheckAddContract</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CheckLogin</servlet-name>
         <url-pattern>/CheckLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HandleInitServer</servlet-name>
+        <url-pattern>/HandleInitServer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckAddUser</servlet-name>
+        <url-pattern>/CheckAddUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetAllUsers</servlet-name>
+        <url-pattern>/GetAllUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckAddContract</servlet-name>
+        <url-pattern>/CheckAddContract</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

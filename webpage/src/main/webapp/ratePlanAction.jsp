@@ -4,7 +4,7 @@
     Author     : ahmedmedhat
 --%>
 <%@page import="java.util.List"%>
-<%@page import="Database.DBConnection"%>
+<%@page import="Database.HandleDB"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,8 +17,7 @@
         <jsp:include page="ratePlan.jsp"></jsp:include>
         <%
             //Connection with database
-            DBConnection db = new DBConnection();
-            db.getConnection();
+            HandleDB db = new HandleDB();
             
             String id = request.getParameter("id");
             String ratePlan = request.getParameter("rateplan");
