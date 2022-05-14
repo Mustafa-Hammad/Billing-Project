@@ -5,7 +5,6 @@
 package com.billing.invoice;
 
 import com.billibg.database.DatabaseConnection;
-import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,20 +56,16 @@ public class Invoice {
                 int cuid = rs.getInt(2);
                 String name = rs.getString(3);
                 int numberOfContract = rs.getInt(4);
-                int costRecurring = rs.getInt(5);
-                float priceAfterTax = rs.getFloat(6);
-                float priceBeforeTax = rs.getFloat(7);
+
                 hm.put("c_name", name);
                 fileNamePdf = "./pdf/" + name + "_" + date + ".pdf";
-                to = rs.getString(8);
+                to = rs.getString(5);
                 hm.put("c_id", cuid);
                 hm.put("no_con", numberOfContract);
-                hm.put("recurring", costRecurring);
-                hm.put("taxes", priceBeforeTax);
-                hm.put("total", priceAfterTax);
-                System.out.println(cuid + " : " + name + " : " + numberOfContract + " : " + costRecurring + " : " + priceAfterTax + " : " + priceBeforeTax);
+
+                System.out.println(cuid + " : " + name + " : " + numberOfContract);
                 creatPDF();
-                
+
             }
         } catch (SQLException e) {
             System.out.println("error - at getting customer data from db : " + e);
@@ -112,12 +107,16 @@ public class Invoice {
 
                 int fuData = rs.getInt(21);
 
+                int costRecurring = rs.getInt(22);
+                float priceAfterTax = rs.getFloat(23);
+                float priceBeforeTax = rs.getFloat(24);
+
                 System.out.println(msisdn + " : " + nameRatePlan + " : " + costRatePlan + " : "
                         + costOneTimeFee + " : " + costExternalCharge + " : " + usedFuVoiceOnNet
                         + usedFuVoiceCrossNet + " : " + usedFuVoiceInternational + " : " + usedFuSMSOnNet + " : "
                         + usedFuSMSCrossNet + " : " + usedFuSMSInternational + " : " + usedFuData + " : " + fuVoiceOnNet
                         + fuVoiceCrossNet + " : " + fuVoiceInternational + " : " + fuSMSOnNet + " : "
-                        + fuSMSCrossNet + " : " + fuSMSInternational + " : " + fuData);
+                        + fuSMSCrossNet + " : " + fuSMSInternational + " : " + fuData + " : " + costRecurring + " : " + priceAfterTax + " : " + priceBeforeTax);
                 hm.put("MSISDN", msisdn);
                 hm.put("RP", nameRatePlan);
                 hm.put("RPC", costRatePlan);
@@ -137,6 +136,9 @@ public class Invoice {
                 hm.put("data_used", usedFuData);
                 hm.put("cost_ext", costExternalCharge);
                 hm.put("cost_one_time", costOneTimeFee);
+                hm.put("recurring", costRecurring);
+                hm.put("taxes", priceBeforeTax);
+                hm.put("total", priceAfterTax);
                 getCustomerData(rs.getInt(2));
 
             }
@@ -171,8 +173,8 @@ public class Invoice {
         }
 
     }
-    
-    public void sendemail(){
+
+    public void sendemail() {
 
         // Sender's email ID needs to be mentioned
         String from = "project.billingiti@gmail.com";
