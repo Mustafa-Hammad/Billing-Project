@@ -29,18 +29,19 @@ public class Billing {
         customerInfo = bH.getAllCustommer();
         for (Customer cu : customerInfo) {
 
-            billForOneCustomer(cu.getCustomerId());
-
             customer.setCustomerId(cu.getCustomerId());
             customer.setName(cu.getName());
+            customer.setEmail(cu.getEmail());
             billingContract.setCuid(cu.getCustomerId());
-            billingContract.setCostRecurring(cu.getCustomerId());
-            if(bH.getRemaingRecurringMonth(cu.getCustomerId())==0){
+            billingContract.setRecurringCost(cu.getCustomerId());
+            if (bH.getRemaingRecurringMonth(cu.getCustomerId()) == 0) {
                 bH.resetrecurring(cu.getCustomerId());
-            }
-            else{
+            } else {
                 bH.updateRecurringMonths(cu.getCustomerId());
             }
+            
+            billForOneCustomer(cu.getCustomerId());
+            bH.insertCustomer(customer);
         }
     }
 
@@ -91,11 +92,18 @@ public class Billing {
 
             // set one time fee details to table billing details one time fee
             // get recurring => total cost and decrease one from number of month 
-              
             // set recurring details to table billing details recurring
             // rate plan cost tax after
-            billingContract.setPriceAfterTax((float) (detailsRP.getMonthlyfee() * 1.1));
+//            billingContract.setPriceAfterTax((float) (detailsRP.getMonthlyfee() * 1.1));
             // set udr isbilling true 
+            float TotalPrice = billingContract.getRecurringCost() + billingContract.getCostRP() + billingContract.getCostOneTimeFee() + billingContract.getCostExternalCharge();
+
+            billingContract.setTax((float) (TotalPrice * 0.1));
+            billingContract.setPriceAfterTax((float) (TotalPrice * 1.1));
+            bH.ResetContract(c.getId(), detailsRP);
+            bH.insertContract(billingContract);
+            billingContract.setRecurringCost(0);
+
             bH.updateUdr(c.getId());
 
             // set free unit to contract
@@ -105,6 +113,9 @@ public class Billing {
     public static void main(String[] args) {
         DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
         db.connectToDatabase();
+        Billing billing=new Billing();
+        billing.billGeneration();
+                
     }
 
 }

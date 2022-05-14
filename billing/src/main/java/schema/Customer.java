@@ -9,21 +9,22 @@ package schema;
  * @author asmaaMohamed
  */
 public class Customer {
-     
-    private int invoiceId;
-    private  int numberOfContract; 
-    private  int customerId;
-    private  String  name;
 
-    public Customer(int customerId, String name) {
+    private int invoiceId;
+    private int numberOfContract;
+    private int customerId;
+    private String name;
+    private  String email;
+
+    public Customer(int customerId, String name,String email) {
         this.customerId = customerId;
         this.name = name;
+        this.email=email;
     }
-    public Customer(){}
-    
-    
-    
-    
+
+    public Customer() {
+    }
+
     public void setInvoiceId(int invoiceId) {
         this.invoiceId = invoiceId;
     }
@@ -40,6 +41,18 @@ public class Customer {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    
+    
+
     public int getInvoiceId() {
         return invoiceId;
     }
@@ -55,8 +68,8 @@ public class Customer {
     public String getName() {
         return name;
     }
-    
-    
-      
-    
+
+   
+
+   
 }

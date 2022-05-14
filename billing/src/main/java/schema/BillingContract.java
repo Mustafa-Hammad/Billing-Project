@@ -15,10 +15,10 @@ public class BillingContract {
     private String rp;
     private int costRP;
     private int costOneTimeFee;
-    private int costRecurring;
     private float costExternalCharge;
+    private int recurringCost;
     private float priceAfterTax;
-    private float priceBeforeTax;
+    private float tax;
     private int usedFuVOnnet;
     private int usedFuVcrossnet;
     private int usedFuVinter;
@@ -59,20 +59,22 @@ public class BillingContract {
         this.costOneTimeFee = costOneTimeFee;
     }
 
-    public void setCostRecurring(int costRecurring) {
-        this.costRecurring = costRecurring;
-    }
+    
 
     public void setCostExternalCharge(float costExternalCharge) {
         this.costExternalCharge = costExternalCharge;
+    }
+
+    public void setRecurringCost(int recurringCost) {
+        this.recurringCost = recurringCost;
     }
 
     public void setPriceAfterTax(float priceAfterTax) {
         this.priceAfterTax = priceAfterTax;
     }
 
-    public void setPriceBeforeTax(float priceBeforeTax) {
-        this.priceBeforeTax = priceBeforeTax;
+    public void setTax(float priceBeforeTax) {
+        this.tax = priceBeforeTax;
     }
 
     public void setUsedFuVOnnet(int usedFuVOnnet) {
@@ -147,20 +149,22 @@ public class BillingContract {
         return costOneTimeFee;
     }
 
-    public int getCostRecurring() {
-        return costRecurring;
-    }
+  
 
     public float getCostExternalCharge() {
         return costExternalCharge;
+    }
+
+    public int getRecurringCost() {
+        return recurringCost;
     }
 
     public float getPriceAfterTax() {
         return priceAfterTax;
     }
 
-    public float getPriceBeforeTax() {
-        return priceBeforeTax;
+    public float getTax() {
+        return tax;
     }
 
     public int getUsedFuVOnnet() {
