@@ -55,12 +55,13 @@
         </style>
         <body>
 
+            
             <div class="bgimg">
                 <div class="topleft">
-                    <p>Logo</p>
+                   <img src="logo.png">
                 </div>
                 <div class="middle">
-                    <h1>2Eleven</h1>
+                    <a href="http://localhost:8080/postbaidSystem/mainPage.jsp"><img src="logo.png"><a>
                     <hr>
                     <p id="demo" style="font-size:30px"></p>
                 </div>
