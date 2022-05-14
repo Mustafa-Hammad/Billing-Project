@@ -60,4 +60,6 @@
         <p id="error-login"></p>
     </form>  
 </div>
+<%@ include file="footer.html" %>
+
 <%@ include file="footerBody.html" %>

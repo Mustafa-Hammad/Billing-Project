@@ -108,15 +108,15 @@ public class Invoice {
                 int fuData = rs.getInt(21);
 
                 int costRecurring = rs.getInt(22);
-                float priceAfterTax = rs.getFloat(23);
-                float priceBeforeTax = rs.getFloat(24);
+                float tax = rs.getFloat(23);
+                float totalPrice = rs.getFloat(24);
 
                 System.out.println(msisdn + " : " + nameRatePlan + " : " + costRatePlan + " : "
                         + costOneTimeFee + " : " + costExternalCharge + " : " + usedFuVoiceOnNet
                         + usedFuVoiceCrossNet + " : " + usedFuVoiceInternational + " : " + usedFuSMSOnNet + " : "
                         + usedFuSMSCrossNet + " : " + usedFuSMSInternational + " : " + usedFuData + " : " + fuVoiceOnNet
                         + fuVoiceCrossNet + " : " + fuVoiceInternational + " : " + fuSMSOnNet + " : "
-                        + fuSMSCrossNet + " : " + fuSMSInternational + " : " + fuData + " : " + costRecurring + " : " + priceAfterTax + " : " + priceBeforeTax);
+                        + fuSMSCrossNet + " : " + fuSMSInternational + " : " + fuData + " : " + costRecurring + " : " + tax + " : " + totalPrice);
                 hm.put("MSISDN", msisdn);
                 hm.put("RP", nameRatePlan);
                 hm.put("RPC", costRatePlan);
@@ -137,8 +137,8 @@ public class Invoice {
                 hm.put("cost_ext", costExternalCharge);
                 hm.put("cost_one_time", costOneTimeFee);
                 hm.put("recurring", costRecurring);
-                hm.put("taxes", priceBeforeTax);
-                hm.put("total", priceAfterTax);
+                hm.put("taxes", tax);
+                hm.put("total", totalPrice);
                 getCustomerData(rs.getInt(2));
 
             }

@@ -75,7 +75,7 @@
         <div class="p-2 bg-dark text-white">Email : <%=request.getParameter("email")%></div>
     </div>
 
-    <div class="card-deck">
+    <div class="cardrp">
         <%
             String uID = request.getParameter("id");
             Vector<Contract> contracts = db.getAllContracts(Integer.parseInt(uID));
