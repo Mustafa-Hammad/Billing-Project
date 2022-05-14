@@ -143,7 +143,7 @@
 			</textField>
 			<image hAlign="Center">
 				<reportElement x="0" y="0" width="84" height="70" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["C:/Users/Mustafa Raed/JaspersoftWorkspace/Vodafone-Logo.png"]]></imageExpression>
+				<imageExpression><![CDATA["Vodafone-Logo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="213" y="10" width="127" height="41" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">

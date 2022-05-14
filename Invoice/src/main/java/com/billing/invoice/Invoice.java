@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.*;
@@ -159,7 +158,7 @@ public  void getMsisdn() throws SQLException{
             DatabaseConnection.getDatabaseInstance().connectToDatabase();
             new Invoice().getMsisdn();
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Logger.getLogger(Invoice.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error - rating connection to db : " + e);
         }
