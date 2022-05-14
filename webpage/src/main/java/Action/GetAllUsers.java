@@ -6,7 +6,7 @@ package Action;
 
 import Database.HandleDB;
 import Schema.Customer;
-//import com.google.gson.Gson;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -32,8 +32,8 @@ public class GetAllUsers extends HttpServlet {
         PrintWriter pw = res.getWriter();
 
         Vector<Customer> customers = db.getAllUsers();
-//        Gson gson = new Gson();
-//        String allCustomerS = gson.toJson(customers);
-//        pw.println(allCustomerS);
+        Gson gson = new Gson();
+        String allCustomerS = gson.toJson(customers);
+        pw.println(allCustomerS);
     }
 }

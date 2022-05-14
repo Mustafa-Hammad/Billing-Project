@@ -40,7 +40,7 @@
                         <tr>
                             <td>FU VOICE Cross Net</td>
                             <td><%=ratePlan.getFuVOnCross()%></td>
-                            <td>Extra cost <%=ratePlan.getFuVOnCross()%></td>
+                            <td>Extra cost <%=ratePlan.getExtraVOnNet()%></td>
 
                         </tr>
                         <tr>

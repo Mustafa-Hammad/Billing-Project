@@ -13,7 +13,7 @@ public class Customer {
     private int id;
     private String name, password, email;
 
-    public Customer(int id, String name, String password, String email) {
+    public Customer(int id, String name,String email, String password) {
         this.id = id;
         this.name = name;
         this.password = password;

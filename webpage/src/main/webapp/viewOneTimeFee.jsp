@@ -68,4 +68,3 @@
     </div>
     <%@ include file="footer.html" %>
     <%@ include file="footerBody.html" %>
-

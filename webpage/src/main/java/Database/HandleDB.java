@@ -6,16 +6,17 @@ package Database;
 
 import Schema.Contract;
 import Schema.Customer;
-import Schema.OTFNames;
 import Schema.OneTimeFee;
 import Schema.OneTimeFeeForCst;
+import Schema.Product;
 import Schema.RatePlan;
+import Schema.ServiceT;
 import User.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -111,6 +112,167 @@ public class HandleDB {
         return msisdn;
     }
 
+
+    public Vector<OneTimeFee> getAllOneTimeFeePlanWithAllDetails() {
+        Vector<OneTimeFee> oneTF = new Vector<OneTimeFee>();
+        int i = 0;
+        try {
+            ps = db.getConnection().prepareStatement("select * from onetimefeebucket");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                OneTimeFee oTF = new OneTimeFee();
+                oTF.setBucketID(rs.getInt(1));
+                oTF.setZoneID(rs.getInt(2));
+                oTF.setServiceID(rs.getInt(3));
+                oTF.setCost(rs.getInt(4));
+                oTF.setQuota(rs.getInt(5));
+
+//                OTFNames names = new OTFNames();
+//                if(oTF.getZoneID() == 1){
+//                    names.setZone("On Net");
+//                }else if(oTF.getZoneID() == 2){
+//                    names.setZone("Cross Net");
+//                }else{}
+                oneTF.add(i++, oTF);
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return oneTF;
+    }
+    
+    public Vector<OneTimeFeeForCst> getOneTimeFeePlanWithAllDetailsForCustomer(String uid) {
+        Vector<OneTimeFeeForCst> oneTF = new Vector<OneTimeFeeForCst>();
+        int i = 0;
+        try {
+            ps = db.getConnection().prepareStatement("select * from contract_onetimefee where con_id in (select con_id from contract where cu_id = ?)");
+            ps.setInt(1, Integer.parseInt(uid));
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                OneTimeFeeForCst oTF = new OneTimeFeeForCst();
+                oTF.setContractOTFID(rs.getInt(1));
+                oTF.setContractID(rs.getInt(2));
+                oTF.setBucketID(rs.getInt(3));
+                oTF.setConsumtion(rs.getInt(4));
+
+//                OTFNames names = new OTFNames();
+//                if(oTF.getZoneID() == 1){
+//                    names.setZone("On Net");
+//                }else if(oTF.getZoneID() == 2){
+//                    names.setZone("Cross Net");
+//                }else{}
+                oneTF.add(i++, oTF);
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return oneTF;
+    }
+
+    public void addOneTimeFee(String serive, String zone, String qouta, String cost) {
+        try {
+            ps = db.getConnection().prepareStatement("INSERT INTO onetimefeebucket(bucket_id, zone_id, service_id, cost, quota) VALUES(DEFAULT, ?, ?, ?, ?) RETURNING bucket_id;");
+            ps.setInt(1, Integer.parseInt(serive));
+            ps.setInt(2, Integer.parseInt(zone));
+            ps.setInt(3, Integer.parseInt(qouta));
+            ps.setInt(4, Integer.parseInt(cost));
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void contractAddOneTimeFee(String bkId, String contId, String quota) {
+        try {
+            ps = db.getConnection().prepareStatement("INSERT INTO contract_onetimefee(con_otf, con_id, bucket_id, consumtion) VALUES(DEFAULT, ?, ?, ?) RETURNING con_otf;");
+            ps.setInt(1, Integer.parseInt(contId));
+            ps.setInt(2, Integer.parseInt(bkId));
+            ps.setInt(3, Integer.parseInt(quota));
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
+
+    public String addRecurringToUser(int cuid, int ruid, int remaing) {
+        String res = "false___please try again";
+        try {
+            //Cu_Id serial, name string, address string, cridet int
+            ps = db.getConnection().prepareStatement("insert into customer_recurring values(?,?, ?)");
+            ps.setInt(1, remaing);
+            ps.setInt(2, cuid);
+            ps.setInt(3, ruid);
+
+            int i = ps.executeUpdate();
+            if (i > 0) {
+                return "true___";
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, e);
+
+            if (e.getSQLState().equals("23505")) {
+                String msg = e.getMessage();
+                String whichError = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
+//                System.out.println(" :  " + whichError);
+                res = "false___" + whichError + " already exist";
+            } else {
+                res = "false___please try again";
+//                System.out.println("false___please try again");
+            }
+        }
+        return res;
+    }
+
+    // display users
+    public Vector<Product> getAllRecurringForUser(int cu_id) {
+        Vector<Product> products = new Vector<Product>();
+
+        try {
+            ps = db.getConnection().prepareStatement("select rc.*, c.remaing from recurring rc , customer_recurring c where c.re_id = rc.re_id and c.cu_id = ?");
+            ps.setInt(1, cu_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(rs.getString(2), rs.getInt(1), rs.getInt(4), rs.getInt(5), rs.getInt(6)));
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return products;
+    }
+
+    // display users
+    public Vector<Product> getAllRecurring() {
+        Vector<Product> products = new Vector<Product>();
+
+        try {
+            ps = db.getConnection().prepareStatement("select * from recurring");
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5)));
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        return products;
+    }
+
     // display users
     public Vector<Customer> getAllUsers() {
         Vector<Customer> customer = new Vector<Customer>();
@@ -120,7 +282,7 @@ public class HandleDB {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                customer.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getString(3)));
+                customer.add(new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
             }
         } catch (SQLException e) {
             System.err.println(e);
@@ -275,95 +437,6 @@ public class HandleDB {
         return ratePlans;
     }
 
-    public Vector<OneTimeFee> getAllOneTimeFeePlanWithAllDetails() {
-        Vector<OneTimeFee> oneTF = new Vector<OneTimeFee>();
-        int i = 0;
-        try {
-            ps = db.getConnection().prepareStatement("select * from onetimefeebucket");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                OneTimeFee oTF = new OneTimeFee();
-                oTF.setBucketID(rs.getInt(1));
-                oTF.setZoneID(rs.getInt(2));
-                oTF.setServiceID(rs.getInt(3));
-                oTF.setCost(rs.getInt(4));
-                oTF.setQuota(rs.getInt(5));
-
-//                OTFNames names = new OTFNames();
-//                if(oTF.getZoneID() == 1){
-//                    names.setZone("On Net");
-//                }else if(oTF.getZoneID() == 2){
-//                    names.setZone("Cross Net");
-//                }else{}
-                oneTF.add(i++, oTF);
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e);
-        }
-        return oneTF;
-    }
-    
-    public Vector<OneTimeFeeForCst> getOneTimeFeePlanWithAllDetailsForCustomer(String uid) {
-        Vector<OneTimeFeeForCst> oneTF = new Vector<OneTimeFeeForCst>();
-        int i = 0;
-        try {
-            ps = db.getConnection().prepareStatement("select * from contract_onetimefee where con_id in (select con_id from contract where cu_id = ?)");
-            ps.setInt(1, Integer.parseInt(uid));
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                OneTimeFeeForCst oTF = new OneTimeFeeForCst();
-                oTF.setContractOTFID(rs.getInt(1));
-                oTF.setContractID(rs.getInt(2));
-                oTF.setBucketID(rs.getInt(3));
-                oTF.setConsumtion(rs.getInt(4));
-
-//                OTFNames names = new OTFNames();
-//                if(oTF.getZoneID() == 1){
-//                    names.setZone("On Net");
-//                }else if(oTF.getZoneID() == 2){
-//                    names.setZone("Cross Net");
-//                }else{}
-                oneTF.add(i++, oTF);
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e);
-        }
-        return oneTF;
-    }
-
-    public void addOneTimeFee(String serive, String zone, String qouta, String cost) {
-        try {
-            ps = db.getConnection().prepareStatement("INSERT INTO onetimefeebucket(bucket_id, zone_id, service_id, cost, quota) VALUES(DEFAULT, ?, ?, ?, ?) RETURNING bucket_id;");
-            ps.setInt(1, Integer.parseInt(serive));
-            ps.setInt(2, Integer.parseInt(zone));
-            ps.setInt(3, Integer.parseInt(qouta));
-            ps.setInt(4, Integer.parseInt(cost));
-            rs = ps.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void contractAddOneTimeFee(String bkId, String contId, String quota) {
-        try {
-            ps = db.getConnection().prepareStatement("INSERT INTO contract_onetimefee(con_otf, con_id, bucket_id, consumtion) VALUES(DEFAULT, ?, ?, ?) RETURNING con_otf;");
-            ps.setInt(1, Integer.parseInt(contId));
-            ps.setInt(2, Integer.parseInt(bkId));
-            ps.setInt(3, Integer.parseInt(quota));
-            rs = ps.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public String addContract(String msisdn, String rpid, String cuid) {
         String res = "false___please try again";
         try {
@@ -398,6 +471,70 @@ public class HandleDB {
             } else {
                 res = "false___please try again";
 //                System.out.println("false___please try again");
+            }
+        }
+        return res;
+    }
+
+    public boolean addRatingpkg(int rp_id, int service_id, int zone_id, int fu, int externalcost) {
+
+        boolean res = false;
+        try {
+            //Cu_Id serial, name string, address string, cridet int
+            ps = db.getConnection().prepareStatement("insert into ratingpkg (rp_id, zone_id, service_id, fu, externalcost) values(?,?, ?, ?,?)");
+            ps.setInt(1, rp_id);
+            ps.setInt(2, zone_id);
+            ps.setInt(3, service_id);
+            ps.setInt(4, fu);
+            ps.setInt(5, externalcost);
+
+            int i = ps.executeUpdate();
+            if (i > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return res;
+    }
+
+    public String addNewRatePlan(RatePlan rp, List<ServiceT> services) {
+        String res = "false___please try again";
+        boolean resFromRatingpkg = true;
+        boolean setCommit = true;
+        try {
+            ps = db.getConnection().prepareStatement("insert into rateplan (name,monthlyfee) values(?,?) RETURNING rp_id");
+            ps.setString(1, rp.getName());
+            ps.setInt(2, rp.getMonthlyfee());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                for (ServiceT service : services) {
+                    if (Integer.parseInt(service.getFu()) != 0 && Integer.parseInt(service.getExternalCost()) != 0) {
+                        resFromRatingpkg = addRatingpkg(rs.getInt(1), service.getService(), service.getZone(),
+                                Integer.parseInt(service.getFu()), Integer.parseInt(service.getExternalCost()));
+                    }
+                    if (!resFromRatingpkg) {
+                        setCommit = false;
+                        db.getConnection().rollback();
+                        break;
+                    }
+                }
+                if (setCommit) {
+                    db.getConnection().commit();
+                    return "true___";
+                }
+            }
+            db.getConnection().rollback();
+        } catch (SQLException e) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, e);
+
+            if (e.getSQLState().equals("23505")) {
+                String msg = e.getMessage();
+                String whichError = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
+                res = "false___" + whichError + " already exist";
+            } else {
+                res = "false___please try again";
             }
         }
         return res;

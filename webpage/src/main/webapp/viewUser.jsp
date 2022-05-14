@@ -21,6 +21,7 @@
                 <th>Email</th>
                 <th>Password</th>
                 <th>View Contracts</th>
+                <th>Recurring</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,8 @@
                 <td><%=customer.getEmail()%></td>
                 <td><%=customer.getPassword()%></td>
                 <td>  <a href="detailsUser.jsp?id=<%=customer.getId()%>&name=<%=customer.getName()%>&email=<%=customer.getEmail()%>" class="btn btn-info" role="button">Details</a></td>
+                <td>  <a href="displayUserRecurring.jsp?id=<%=customer.getId()%>&name=<%=customer.getName()%>" class="btn btn-primary" role="button">Recurring</a></td>
+
             </tr> 
             <% }
             %>

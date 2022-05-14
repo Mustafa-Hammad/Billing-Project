@@ -121,7 +121,7 @@
                 </table>
             </div> 
             <div class="card-footer d-flex justify-content-around">
-                <a href="#" class="btn btn-info" role="button">Change Rate Plan</a>
+<!--                <a href="#" class="btn btn-info" role="button">Change Rate Plan</a>-->
                 <a href="addOneTimeFeeCustomerForm.jsp?cid=<%=contract.getId()%>" class="btn btn-info" role="button">Add One time fee</a>
             </div>
         </div>

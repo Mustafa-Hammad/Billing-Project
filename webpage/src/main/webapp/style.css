@@ -78,7 +78,7 @@ Body {
 
 
 /*add user form page*/
-.addUser-form, .viewDetailsUser, .viewUsers{
+.addUser-form, .viewDetailsUser, .viewUsers, .addRate-form{
     display: flex;
     flex-flow: column;
     place-items: center;
@@ -109,13 +109,9 @@ Body {
 
 footer
 {
-/*    position: fixed;
-    bottom: 0;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
     width: 100%;
-}
-#sticky-footer{
-/*    position: -webkit-sticky;*/
-    buttom: 0;
 }
 
 /*

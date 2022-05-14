@@ -12,10 +12,34 @@ public class RatePlan {
 
     int id, fuVOnNet, fuVOnCross, fvVInter, fuSOnNet, fuSOnCross, fvSInter, fvData, monthlyfee;
     int extraVOnNet, extraVOnCross, extraVInter, extraSOnNet, extraSOnCross, extraSInter, extraData;
-
     String name;
 
+    public RatePlan(String name, int monthlyfee,int fuVOnNet, int fuVOnCross, int fvVInter, int fuSOnNet, int fuSOnCross, int fvSInter, int fvData, int extraVOnNet, int extraVOnCross, int extraVInter, int extraSOnNet, int extraSOnCross, int extraSInter, int extraData) {
+        this.fuVOnNet = fuVOnNet;
+        this.fuVOnCross = fuVOnCross;
+        this.fvVInter = fvVInter;
+        this.fuSOnNet = fuSOnNet;
+        this.fuSOnCross = fuSOnCross;
+        this.fvSInter = fvSInter;
+        this.fvData = fvData;
+        this.monthlyfee = monthlyfee;
+        this.extraVOnNet = extraVOnNet;
+        this.extraVOnCross = extraVOnCross;
+        this.extraVInter = extraVInter;
+        this.extraSOnNet = extraSOnNet;
+        this.extraSOnCross = extraSOnCross;
+        this.extraSInter = extraSInter;
+        this.extraData = extraData;
+        this.name = name;
+    }
+
     public RatePlan(int id, int monthlyfee, String name) {
+        this.id = id;
+        this.monthlyfee = monthlyfee;
+        this.name = name;
+    }
+
+    public RatePlan(String name,int monthlyfee) {
         this.id = id;
         this.monthlyfee = monthlyfee;
         this.name = name;
