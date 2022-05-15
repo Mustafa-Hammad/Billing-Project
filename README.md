@@ -12,7 +12,7 @@ The project simulates the real billing system used by the telecom operators in o
 - ### Billing Module
      Calculate users overall usage and fees.
 - ### Invoice Module
-      Generate a bill for every user containing his consumption for a month and how much he should pay.
+     Generate a bill for every user containing his consumption for a month and how much he should pay.
 - ### Website
     #### Admin
     - Create Service Package
