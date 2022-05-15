@@ -48,16 +48,14 @@ public class HandleDB {
         return st;
     }
 
-
-
     public String checkCuid(int cuid) {
-        String res = "false___"+cuid+" doesn't exsit";
+        String res = "false___" + cuid + " doesn't exsit";
         try {
             ps = db.getConnection().prepareStatement("select cu_id,name,email from customer where cu_id = ? ");
             ps.setInt(1, cuid);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return "true___"+rs.getInt(1)+"___"+rs.getString(2)+"___"+rs.getString(3);
+                return "true___" + rs.getInt(1) + "___" + rs.getString(2) + "___" + rs.getString(3);
             }
         } catch (SQLException e) {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, e);
@@ -74,9 +72,6 @@ public class HandleDB {
         }
         return res;
     }
-
-
-
 
     public String addUser(String username, String email, String password, int cuid) {
         String res = "false___please try again";
@@ -109,18 +104,42 @@ public class HandleDB {
 
     public void delete(int id) {
         try {
-            ps = db.getConnection().prepareStatement("delete from contract where cu_id=?;"
-                    + "delete from customer where cu_id=?;");
-            ps.setInt(1, id);
-            ps.setInt(2, id);
-            ps.executeUpdate();
+            try {
+                String query = "delete from contract_onetimefee\n"
+                        + "where con_id in (select con_id from contract\n"
+                        + "where cu_id = ?);"
+                        + "delete from contract\n"
+                        + "where cu_id = ?;\n"
+                        + "\n"
+                        + "delete from customer_recurring\n"
+                        + "where cu_id = ? and remaing <=0;\n";
+                ps = db.getConnection().prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setInt(2, id);
+                ps.setInt(3, id);
+//            ps.setInt(4, id);
+ps.executeUpdate();
 
+            } catch (SQLException ex) {
+                Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String query2 = "delete from customer\n"
+                    + "where cu_id = ?;";
+            try {
+                ps = db.getConnection().prepareStatement(query2);
+            } catch (SQLException ex) {
+                Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                ps.setInt(1, id);
+            } catch (SQLException ex) {
+                Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
 
     public Vector<OneTimeFee> getAllOneTimeFeePlanWithAllDetails() {
         Vector<OneTimeFee> oneTF = new Vector<OneTimeFee>();
@@ -153,7 +172,7 @@ public class HandleDB {
         }
         return oneTF;
     }
-    
+
     public Vector<OneTimeFeeForCst> getOneTimeFeePlanWithAllDetailsForCustomer(String uid) {
         Vector<OneTimeFeeForCst> oneTF = new Vector<OneTimeFeeForCst>();
         int i = 0;
@@ -210,8 +229,6 @@ public class HandleDB {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-
 
     public String addRecurringToUser(int cuid, int ruid, int remaing) {
         String res = "false___please try again";
