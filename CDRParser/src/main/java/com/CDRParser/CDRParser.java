@@ -78,7 +78,7 @@ public class CDRParser {
                             int externalCharge = Integer.parseInt(columns[8]);
                             boolean isRating = Boolean.parseBoolean(columns[9]);
 
-                            CDR cdr = new CDR(cdr_id, columns[1], columns[2], date, columns[4], rateplan_id, service_id, consumption, externalCharge, isRating);
+                            CDR cdr = new CDR(columns[1], columns[2], date, columns[4], rateplan_id, service_id, consumption, externalCharge, isRating);
                             data.insertCDR(cdr);
                             System.out.println("Database Updated Successfully");
                         }
