@@ -20,10 +20,7 @@ The project simulates the real billing system used by the telecom operators in o
     - Add New Users
     - Add New Contract (MSISDN) for User
     - Generate Invoice per User
-
-    #### User
-    - Check his Invoice
-    - View PostPaid RatePalns
+    - Check users Invoice
     
 ![image](https://user-images.githubusercontent.com/52509314/168492261-dd90f643-16c0-4494-9dba-1ea915682f2b.png)
 ![image](https://user-images.githubusercontent.com/52509314/168492267-9d11b7b3-0851-480c-b051-c539ece98b19.png)
