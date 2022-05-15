@@ -1,22 +1,22 @@
 <h1>Billing Project</h1>
 <h2>Description</h2
 The project simulates the real billing system used by the telecom operators in order to rate the postpaid users consumption and provide a detailed invoice for each user with all his owned numbers and the usage for each one.
-Modules
-*CDR Parser
+<h2>Modules</h2>
+<h3>*CDR Parser</h3>
 Check if there is a new CDR (Call Data Record) from Mediation System. Then process the CDR and insert data into Database.
-*Rating Engine
+<h3>*Rating Engine</h3>
  Process every CDR data and rate this consumption based on contract data.
-*Billing Module
+<h3>*Billing Module</h3>
 Calculate users overall usage and fees.
-*Invoice Module
+<h3>*Invoice Module</h3>
 Generate a bill for every user containing his consumption for a month and how much he should pay.
-*Website
+<h3>*Website</h3>
 Admin
    -Create a Service Package
    -Create Rataplan
    -Add New Users
-    -Add New Contract (MSISDN) for User
-    -Generate Invoice per User
+   -Add New Contract (MSISDN) for User
+   -Generate Invoice per User
 User
    -Check his Invoice
    -View PostPaid Ratepalns
@@ -27,7 +27,7 @@ User
    ![image](https://user-images.githubusercontent.com/52509314/168492282-701f6cb4-6e6b-4708-ae24-345cbd684f98.png)
 
 
-Contributors
+<h2>Contributors</h2>
 -	Ahmed Atef Mohammed 
 -	Ahmed Medhat Mohamed
 -	Asmaa Mohamed Ali
