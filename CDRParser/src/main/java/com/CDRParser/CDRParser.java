@@ -50,7 +50,6 @@ public class CDRParser {
         String path = System.getProperty("user.dir");
         Path p = Paths.get(path);
         Path newCdr = Paths.get(p.getParent() + "/newCdr/");
-        System.out.println(newCdr.toString());
         Path dest_folder = Paths.get(p.getParent() + "/oldCdr/");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy", Locale.ENGLISH);
 
@@ -88,7 +87,7 @@ public class CDRParser {
                         Files.move(origin_folder, dest_folder.resolve(my_cdr.getName()), StandardCopyOption.REPLACE_EXISTING);
 
                     } else {
-                        System.out.println("Please archive unneeded CDRs first");
+                        System.out.println("CDR is empty");
                         break;
 
                     }
