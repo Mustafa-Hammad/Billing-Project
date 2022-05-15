@@ -51,8 +51,8 @@ public class CreateCDR {
         LocalDate date = LocalDate.now();
         int rateplan_id ;
         int service_id ;
-        float consumption = 0;
-        int externalCharge ;
+        float consumption ;
+        int externalCharge = 0;
         boolean isRating = false;
         Scanner sc = new Scanner(System.in); 
         System.out.print("From- ");
@@ -63,8 +63,8 @@ public class CreateCDR {
         rateplan_id = sc.nextInt();
         System.out.print("service id- ");
         service_id = sc.nextInt();
-        System.out.print("externalCharge- ");
-        externalCharge = sc.nextInt();
+        System.out.print("consumption- ");
+        consumption = sc.nextInt();
         
         
 
