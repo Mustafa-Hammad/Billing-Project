@@ -11,12 +11,9 @@ import Schema.OneTimeFeeForCst;
 import Schema.Product;
 import Schema.RatePlan;
 import Schema.ServiceT;
-import User.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -109,7 +106,7 @@ public class HandleDB {
             String query2 = "delete from contract\n"
                     + "where cu_id = ?;";
             String query3 = "delete from customer_recurring\n"
-                    + "where cu_id = ?;";
+                    + "where cu_id = ? and remaing <= 0 ;";
             String query4 = "delete from customer\n"
                     + "where cu_id = ?;";
             
