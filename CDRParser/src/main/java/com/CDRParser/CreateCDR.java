@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -26,7 +27,7 @@ public class CreateCDR {
         Path p = Paths.get(path);
         Path newCdr = Paths.get(p.getParent() + "/newCdr/");
 
-        File file = new File(newCdr.toString()+"/"+date.toString()+"_"+ time.toString()+".csv");
+        File file = new File(newCdr.toString()+"/"+date.toString()+"_"+ time.toString().replace(":", "-")+".csv");
         System.out.println(file);
         try {
             FileWriter outputfile = new FileWriter(file);
@@ -35,8 +36,10 @@ public class CreateCDR {
             String consum = Float.toString(consumption);
             String external = Integer.toString(externalCharge);
             String Rating = Boolean.toString(isRating);
+            String newdate = date.getDayOfMonth()+"/"+date.getMonthValue()+"/"+date.getYear();
             try ( CSVWriter writer = new CSVWriter(outputfile)) {
-                String[] header = {from, to, date.format(DateTimeFormatter.ISO_DATE), time.toString(), rateplan, service, consum, external, Rating};
+                String[] header = {from, to, newdate, time.toString(), rateplan, service, consum, external, Rating};
+                System.out.println(Arrays.toString(header));
                 writer.writeNext(header);
             }
         } catch (IOException e) {
