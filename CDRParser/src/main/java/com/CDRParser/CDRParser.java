@@ -4,6 +4,7 @@
  */
 package com.CDRParser;
 
+import com.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,7 +52,7 @@ public class CDRParser {
         Path p = Paths.get(path);
         Path newCdr = Paths.get(p.getParent() + "/newCdr/");
         Path dest_folder = Paths.get(p.getParent() + "/oldCdr/");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         while (true) {
             boolean check = checkNewCdr(newCdr.toString());
@@ -64,20 +65,20 @@ public class CDRParser {
                     if (my_cdr != null) {
                         String[] columns;
                         CDRDBIns data = new CDRDBIns();
-                        BufferedReader in = new BufferedReader(new FileReader(my_cdr));
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            columns = line.split(",");
+                        CSVReader in = new CSVReader(new FileReader(my_cdr));
+                        String[] line ;
+                        while ((line= in.readNext()) != null) {
+                            columns = line;
 
-                            int cdr_id = Integer.parseInt(columns[0]);
-                            Date date = formatter.parse(columns[3]);
-                            int rateplan_id = Integer.parseInt(columns[5]);
-                            int service_id = Integer.parseInt(columns[6]);
-                            float consumption = Float.parseFloat(columns[7]);
-                            int externalCharge = Integer.parseInt(columns[8]);
-                            boolean isRating = Boolean.parseBoolean(columns[9]);
+                            System.out.println(columns[2]);
+                            Date date = formatter.parse(columns[2]);
+                            int rateplan_id = Integer.parseInt(columns[4]);
+                            int service_id = Integer.parseInt(columns[5]);
+                            float consumption = Float.parseFloat(columns[6]);
+                            int externalCharge = Integer.parseInt(columns[7]);
+                            boolean isRating = Boolean.parseBoolean(columns[8]);
 
-                            CDR cdr = new CDR(cdr_id, columns[1], columns[2], date, columns[4], rateplan_id, service_id, consumption, externalCharge, isRating);
+                            CDR cdr = new CDR(columns[0], columns[1], date, columns[3], rateplan_id, service_id, consumption, externalCharge, isRating);
                             data.insertCDR(cdr);
                             System.out.println("Database Updated Successfully");
                         }

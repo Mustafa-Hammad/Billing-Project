@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>  
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="https://logosvector.net/wp-content/uploads/2013/06/vodafone-plc-vector-logo-200x200.png">
+
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            Body {
+                font-family: Calibri, Helvetica, sans-serif;
+                background-color: #fff;
+                color: darkred;
+            }
+            center{
+                margin-bottom: 20px
+            }
+            .container{
+                height: 100vh;
+                display: flex;
+                flex-flow: column;
+                place-content: center;
+                place-items: center;
+            }
+
+            .container-form{
+                padding: 20px;
+
+                border-radius: 11px;
+
+                background-color: #F3F6F9 ;
+                /*box-shadow: -4px 3px 16px -10px black;*/
+            }
+
+
+
+
+
+        </style> 
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="container-form">   
+
+                <center> <h1> Admin Login Form </h1> </center>   
+                <form id="signIn">  
+                    <div class="input-form">
+                        <label for="name">Name</label>
+                        <input type="text" placeholder="Enter Username" name="username" required><br>
+                    </div>
+
+                    <div class="input-form">
+                        <label for="password">Password</label>
+                        <input type="password" placeholder="Enter Password" name="password" required>  
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="btnSumbit">Login</button>   
+                    </div>
+                    <p id="error-login"></p>
+                </form>  
+            </div>
+
+        </div>
+    </body>
+
+    <script>
+        let form = document.getElementById("signIn");
+
+        const submitvalidation = (e) => {
+            e.preventDefault();
+            // Get all field data from the form
+            let data = new FormData(form);
+            // Convert to a query string
+            queryString = "?" + new URLSearchParams(data).toString();
+
+            var url = "/postbaidSystem/CheckLogin" + queryString;
+
+            if (window.XMLHttpRequest) {
+                request = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                request = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            try {
+                request.onreadystatechange = sendInfo;
+                request.open("POST", url, true);
+                request.send();
+
+            } catch (e) {
+                alert("Unable to connect server");
+            }
+        }
+
+
+
+        function sendInfo() {
+            if (request.readyState == 4) {
+                //            var res = JSON.parse(request.responseText);
+                if (request.responseText == "true") {
+                    window.location.replace("http://localhost:8080/postbaidSystem/mainPage.jsp");
+                } else {
+                    document.getElementById("error-login").innerHTML = "Wrong user name or password ";
+                }
+            }
+        }
+        form.addEventListener("submit", submitvalidation);
+
+
+    </script>
+
+</html>

@@ -10,6 +10,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Welcome Page</title>
+                <link rel="icon" href="https://logosvector.net/wp-content/uploads/2013/06/vodafone-plc-vector-logo-200x200.png">
+
     </head>
         <style>
             body, html {
@@ -55,12 +57,13 @@
         </style>
         <body>
 
+            
             <div class="bgimg">
                 <div class="topleft">
-                    <p>Logo</p>
+                   <img src="logo.png">
                 </div>
                 <div class="middle">
-                    <h1>2Eleven</h1>
+                    <a href="http://localhost:8080/postbaidSystem/mainPage.jsp"><img src="logo.png"><a>
                     <hr>
                     <p id="demo" style="font-size:30px"></p>
                 </div>

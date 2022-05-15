@@ -7,26 +7,118 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
     Author     : ahmedmedhat
 */
 
-Body {
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    justify-content: space-between;
     font-family: Calibri, Helvetica, sans-serif;
     background-color: #f1f1f1;
 }
-            
-a:link, a:visited {
-  background-color: #BBBBBB;
-  color: white;
-  padding: 14px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+
+
+
+
+
+
+
+.input-form {
+    margin: 20px 0;
 }
 
-a:hover, a:active {
-  background-color: red;
+.input-form label {
+    display: inline-block;
+    width: 100px;
+    /*color: #634506;*/
+    font-weight: 600;
+}
+
+.input-form input {
+    width: 300px;
+    height: 40px;
+    border-radius: 9px;
+    padding: 1px 11px;
+    border: 1px solid darkred;
+}
+
+.input-form input:focus-visible {
+    outline: #eabf65;
+    border: 2px solid #e03b3b;
+}
+.btns{
+    text-align: end;
+
+}
+
+.btnSumbit {
+    background-color: #04aa6d;
+    border: 1px solid #04aa6d;
+    padding: 5px 17px;
+    font-size: 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    color: white;
+    /*width: 75%;*/
+
+    box-shadow: 1px 1px 3px -2px black;
+}
+
+#error-login{
+    color: red;
+    margin: 5px;
+    padding-left: 113px;
+    font-size: 17px;
+    text-transform: capitalize;
+    font-weight: bold;
 }
 
 
 
+/*add user form page*/
+.addUser-form, .viewDetailsUser, .viewUsers, .addRate-form, .main-page{
+    display: flex;
+    flex-flow: column;
+    place-items: center;
+    gap: 25px;
+    margin: 25px;
+}
+
+
+
+.cardrp
+{
+    display: flex;
+    flex-flow: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+footer
+{
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    width: 100%;
+}
+
+/*
 div{
     margin-bottom: 10px;
     padding: 25px;
@@ -48,18 +140,18 @@ div#userForm{
 #home{
     padding: 25px;
     background-color: lightblue;
-    /*height: 250px;*/
+    height: 250px;
     width: 50%;
     margin-left: 25%;
 }
 
 div#href{
     width: 50%;
-    text-align: center; 
+    text-align: center;
 }
 
 thead#cstdata,
 tfoot#cstdata {
     background-color: #333;
     color: #fff;
-}
+}*/

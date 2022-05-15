@@ -4,7 +4,7 @@
     Author     : ahmedmedhat
 --%>
 
-<%@page import="Database.DBConnection"%>
+<%@page import="Database.HandleDB"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,8 +14,7 @@
     </head>
     <body>
         <%
-            DBConnection db = new DBConnection();
-            db.getConnection();
+            HandleDB db = new HandleDB();
 
             String username = request.getParameter("name");
             String password = request.getParameter("pass");
