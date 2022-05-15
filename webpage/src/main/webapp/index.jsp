@@ -60,7 +60,7 @@
             
             <div class="bgimg">
                 <div class="topleft">
-                   <img src="logo.png">
+                   <!--<img src="logo.png">-->
                 </div>
                 <div class="middle">
                     <a href="http://localhost:8080/postbaidSystem/mainPage.jsp"><img src="logo.png"><a>
@@ -98,7 +98,7 @@
                     // If the count down is over, write some text 
                     if (distance < 0) {
                         clearInterval(countdownfunction);
-                        document.getElementById("demo").innerHTML = "EXPIRED";
+                        document.getElementById("demo").innerHTML = "Welcome";
                     }
                 }, 1000);
             </script>
