@@ -146,7 +146,7 @@
 				<imageExpression><![CDATA["Vodafone-Logo.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="213" y="10" width="127" height="41" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+				<reportElement x="213" y="10" width="137" height="41" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>

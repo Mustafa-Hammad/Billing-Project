@@ -191,8 +191,8 @@ public class HandleDB {
             ps = db.getConnection().prepareStatement("INSERT INTO onetimefeebucket(bucket_id, zone_id, service_id, cost, quota) VALUES(DEFAULT, ?, ?, ?, ?) RETURNING bucket_id;");
             ps.setInt(1, Integer.parseInt(serive));
             ps.setInt(2, Integer.parseInt(zone));
-            ps.setInt(3, Integer.parseInt(qouta));
-            ps.setInt(4, Integer.parseInt(cost));
+            ps.setInt(3, Integer.parseInt(cost));
+            ps.setInt(4, Integer.parseInt(qouta));
             rs = ps.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);

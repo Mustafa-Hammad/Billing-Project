@@ -45,7 +45,7 @@ public class Invoice {
     public static String fileNameJrxml = "Bill.jrxml";
     public static String fileNamePdf, to;
 
-    private int getCustomerData(int id) {
+    private int getCustomerData(int id, String MSISDN) {
         try {
             PreparedStatement ps = db.getConnection().prepareStatement("select * from  billingcustomer where cu_id = ?");
             ps.setInt(1, id);
@@ -58,11 +58,11 @@ public class Invoice {
                 int numberOfContract = rs.getInt(4);
 
                 hm.put("c_name", name);
-                fileNamePdf = "./pdf/" + name + "_" + date + ".pdf";
+
                 to = rs.getString(5);
                 hm.put("c_id", cuid);
                 hm.put("no_con", numberOfContract);
-
+                fileNamePdf = "./pdf/" + name + "_" + date + "_" + MSISDN + ".pdf";
                 System.out.println(cuid + " : " + name + " : " + numberOfContract);
                 creatPDF();
 
@@ -139,7 +139,7 @@ public class Invoice {
                 hm.put("recurring", costRecurring);
                 hm.put("taxes", tax);
                 hm.put("total", totalPrice);
-                getCustomerData(rs.getInt(2));
+                getCustomerData(rs.getInt(2), msisdn);
 
             }
             System.out.println("End Invoice----------------------------------------------------------------");
@@ -242,11 +242,23 @@ public class Invoice {
         }
     }
 
+    public void deleteDB() throws SQLException {
+        PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM billingcustomer");
+        int i = ps.executeUpdate();
+        
+        deletecustomer();
+        
+    }
+    public void deletecustomer() throws SQLException{
+        PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM billingcontract ");
+        int i = ps.executeUpdate();
+    }
+
     public static void main(String[] args) {
         try {
             DatabaseConnection.getDatabaseInstance().connectToDatabase();
             new Invoice().getMsisdn();
-
+            new Invoice().deleteDB();
         } catch (SQLException e) {
             Logger.getLogger(Invoice.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error - rating connection to db : " + e);
