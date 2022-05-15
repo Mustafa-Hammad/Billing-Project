@@ -5,7 +5,6 @@
 --%>
 
 <%@page import="Database.HandleDB"%>
-<jsp:useBean id="u" class="User.User"></jsp:useBean>  
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,19 +16,9 @@
         <%
 
             HandleDB db = new HandleDB();
-
-            String queryString = request.getQueryString();          // d=789
-            StringBuilder url = new StringBuilder();
-
-            url.append("?").append(queryString);
-
-//            out.print(url);
-            String str3 = new String(url);
-            String delims = "[?=]+";
-            String[] arr3 = str3.split(delims);
-            out.print(arr3[2]);
-
-            db.delete(Integer.parseInt(String.valueOf(arr3[2])));
+            String cuid = request.getParameter("id");
+//            out.print(cuid);
+            db.delete(Integer.parseInt(cuid));
             response.sendRedirect("viewUser.jsp");
 
         %>      </body>

@@ -118,6 +118,10 @@ footer
     width: 100%;
 }
 
+#delete{
+    background-color: red;
+}
+
 /*
 div{
     margin-bottom: 10px;

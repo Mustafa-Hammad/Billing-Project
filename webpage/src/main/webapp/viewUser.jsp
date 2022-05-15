@@ -27,6 +27,7 @@
                 <th>Password</th>
                 <th>View Contracts</th>
                 <th>Recurring</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="myTable">
@@ -41,7 +42,7 @@
                 <td><%=customer.getPassword()%></td>
                 <td>  <a href="detailsUser.jsp?id=<%=customer.getId()%>&name=<%=customer.getName()%>&email=<%=customer.getEmail()%>" class="btn btn-info" role="button">Details</a></td>
                 <td>  <a href="displayUserRecurring.jsp?id=<%=customer.getId()%>&name=<%=customer.getName()%>" class="btn btn-primary" role="button">Recurring</a></td>
-
+                <td>  <a href="deleteUser.jsp?id=<%=customer.getId()%>" class="btn btn-primary" id="delete" role="button">Delete All Data</a></td>
             </tr> 
             <% }
             %>
