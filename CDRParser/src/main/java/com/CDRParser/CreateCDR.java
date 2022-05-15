@@ -26,7 +26,7 @@ public class CreateCDR {
         Path p = Paths.get(path);
         Path newCdr = Paths.get(p.getParent() + "/newCdr/");
 
-        File file = new File(newCdr.toString()+"/"+date.toString()+"-"+ time.toString()+".csv");
+        File file = new File(newCdr.toString()+"/"+date.toString()+"_"+ time.toString()+".csv");
         System.out.println(file);
         try {
             FileWriter outputfile = new FileWriter(file);
