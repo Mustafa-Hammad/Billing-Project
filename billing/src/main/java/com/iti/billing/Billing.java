@@ -33,13 +33,14 @@ public class Billing {
             customer.setName(cu.getName());
             customer.setEmail(cu.getEmail());
             billingContract.setCuid(cu.getCustomerId());
-            billingContract.setRecurringCost(cu.getCustomerId());
+            billingContract.setRecurringCost(bH.getRecurringCost(cu.getCustomerId()));
             if (bH.getRemaingRecurringMonth(cu.getCustomerId()) == 0) {
                 bH.resetrecurring(cu.getCustomerId());
+                billingContract.setRecurringCost(0);
             } else {
                 bH.updateRecurringMonths(cu.getCustomerId());
             }
-            
+
             billForOneCustomer(cu.getCustomerId());
             bH.insertCustomer(customer);
         }
@@ -113,9 +114,9 @@ public class Billing {
     public static void main(String[] args) {
         DatabaseConnection db = DatabaseConnection.getDatabaseInstance();
         db.connectToDatabase();
-        Billing billing=new Billing();
+        Billing billing = new Billing();
         billing.billGeneration();
-                
+
     }
 
 }
