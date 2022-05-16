@@ -44,7 +44,6 @@ public class CDRParser {
                 while ((line = in.readNext()) != null) {
                     columns = line;
 
-                    System.out.println(columns[2]);
                     Date date = formatter.parse(columns[2]);
                     int rateplan_id = Integer.parseInt(columns[4]);
                     int service_id = Integer.parseInt(columns[5]);
