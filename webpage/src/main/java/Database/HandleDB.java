@@ -11,12 +11,9 @@ import Schema.OneTimeFeeForCst;
 import Schema.Product;
 import Schema.RatePlan;
 import Schema.ServiceT;
-import User.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -103,30 +100,19 @@ public class HandleDB {
     }
 
     public void delete(int id) {
-        try {
-            try {
-                String query = "delete from contract_onetimefee\n"
-                        + "where con_id in (select con_id from contract\n"
-                        + "where cu_id = ?);"
-                        + "delete from contract\n"
-                        + "where cu_id = ?;\n"
-                        + "\n"
-                        + "delete from customer_recurring\n"
-                        + "where cu_id = ? and remaing <=0;\n";
-                ps = db.getConnection().prepareStatement(query);
-                ps.setInt(1, id);
-                ps.setInt(2, id);
-                ps.setInt(3, id);
-//            ps.setInt(4, id);
-ps.executeUpdate();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            String query2 = "delete from customer\n"
+            String query1 = "delete from contract_onetimefee\n"
+                    + "where con_id in (select con_id from contract\n"
+                    + "where cu_id = ?);";
+            String query2 = "delete from contract\n"
                     + "where cu_id = ?;";
+            String query3 = "delete from customer_recurring\n"
+                    + "where cu_id = ? and remaing <= 0 ;";
+            String query4 = "delete from customer\n"
+                    + "where cu_id = ?;";
+            
+            
             try {
-                ps = db.getConnection().prepareStatement(query2);
+                ps = db.getConnection().prepareStatement(query1);
             } catch (SQLException ex) {
                 Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -135,10 +121,64 @@ ps.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
             }
+        try {
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
+            
+
+        try {
+            ps = db.getConnection().prepareStatement(query2);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            ps = db.getConnection().prepareStatement(query3);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            ps = db.getConnection().prepareStatement(query4);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(HandleDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
     }
 
     public Vector<OneTimeFee> getAllOneTimeFeePlanWithAllDetails() {
