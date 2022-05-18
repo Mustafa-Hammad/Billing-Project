@@ -25,6 +25,8 @@ The project simulates the real billing system used by the telecom operators in o
 ![image](https://user-images.githubusercontent.com/52509314/168492267-9d11b7b3-0851-480c-b051-c539ece98b19.png)
 ![image](https://user-images.githubusercontent.com/52509314/168492276-4658bd83-6eff-4bbd-9306-44ab8da71482.png)
 ![image](https://user-images.githubusercontent.com/52509314/168492282-701f6cb4-6e6b-4708-ae24-345cbd684f98.png)
+![image](https://user-images.githubusercontent.com/52509314/169099365-4f42fd96-ffa9-4cd2-9205-66ecb5785259.png)
+
 
 
 
