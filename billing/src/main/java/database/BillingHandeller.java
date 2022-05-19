@@ -93,9 +93,11 @@ public class BillingHandeller {
 
     public int getOnTimeFeesCost(int conId) {
         try {
-            preStm = db.getConnection().prepareStatement("select sum(otf.cost) from onetimefeebucket as otf,contract_onetimefee as con_otf where con_otf.con_id =? con_otf.bucket_id=otf.bucket_id ");
+            preStm = db.getConnection().prepareStatement("select sum(otf.cost) from onetimefeebucket as otf,contract_onetimefee as con_otf where con_otf.con_id =? and con_otf.bucket_id=otf.bucket_id ");
             preStm.setInt(1, conId);
+            rs=preStm.executeQuery();
             while (rs.next()) {
+                System.out.println(rs.getInt(1));
                 return rs.getInt(1);
             }
         } catch (SQLException ex) {

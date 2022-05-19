@@ -132,7 +132,7 @@ public class Rating implements ServiceType, Zone {
     private void setFreeUnitToBucket(float bucketConsumption, int conID, int serviceId, int zoneId) {
         System.out.println(bucketConsumption);
         try {
-            PreparedStatement ps = db.getConnection().prepareStatement("update contract_onetimefee set consumtion=? where con_id=? and bucket_id=(select bucket_id from onetimefeebucket where zone_id=? and service_id=?)");
+            PreparedStatement ps = db.getConnection().prepareStatement("update contract_onetimefee set consumtion=? where con_id=? and bucket_id in (select bucket_id from onetimefeebucket where zone_id=? and service_id=?)");
             ps.setInt(1, (int) bucketConsumption);
             ps.setInt(2, conID);
             ps.setInt(3, zoneId);
