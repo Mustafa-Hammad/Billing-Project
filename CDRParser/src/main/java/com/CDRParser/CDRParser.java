@@ -76,13 +76,10 @@ public class CDRParser {
         while (true) {
             boolean check = checkNewCdr(newCdr.toString());
             if (check == true) {
-                newCDR = true;
-                if (newCDR == true) {
                     System.out.println("New CDR Founded");
                     File my_cdr = readCDR(newCdr.toString());
                     Path origin_folder = Paths.get(newCdr.toString(), my_cdr.getName());
                     Files.move(origin_folder, dest_folder.resolve(my_cdr.getName()), StandardCopyOption.REPLACE_EXISTING);
-                }
             }
 
         }
